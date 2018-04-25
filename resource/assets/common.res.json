@@ -2,7 +2,7 @@
 	"groups": [
 		{
 			"keys": "bg_jpg,button_down_png,button_up_png",
-			"name": "preload"
+			"name": "common"
 		}
 	],
 	"resources": [

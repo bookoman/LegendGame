@@ -59,6 +59,22 @@ var Game = (function (_super) {
         egret.lifecycle.onResume = function () {
             egret.ticker.resume();
         };
+        //加载资源文件
+        var loader = new egret.URLLoader();
+        var urlRequest = new egret.URLRequest("resource/all.res.json");
+        loader.load(urlRequest);
+        loader.addEventListener(egret.Event.COMPLETE, this.loadAllResJsonComplete, this);
+    };
+    Game.prototype.loadAllResJsonComplete = function (e) {
+        var _this = this;
+        this.resJsonDic = {};
+        var loader = e.target;
+        loader.removeEventListener(egret.Event.COMPLETE, this.loadAllResJsonComplete, this);
+        var jsonObj = JSON.parse(loader.data);
+        console.log(jsonObj);
+        jsonObj.resources.forEach(function (resObj) {
+            _this.resJsonDic[resObj.name] = resObj.url;
+        });
         //inject the custom material parser
         //注入自定义的素材解析器
         var assetAdapter = new AssetAdapter();
@@ -73,7 +89,7 @@ var Game = (function (_super) {
             var userInfo;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.loadResource()];
+                    case 0: return [4 /*yield*/, this.loadResource("common")];
                     case 1:
                         _a.sent();
                         this.createGameScene();
@@ -93,7 +109,7 @@ var Game = (function (_super) {
             });
         });
     };
-    Game.prototype.loadResource = function () {
+    Game.prototype.loadResource = function (resName) {
         return __awaiter(this, void 0, void 0, function () {
             var loadingView, e_1;
             return __generator(this, function (_a) {
@@ -102,16 +118,16 @@ var Game = (function (_super) {
                         _a.trys.push([0, 4, , 5]);
                         loadingView = new LoadingUI();
                         this.stage.addChild(loadingView);
-                        return [4 /*yield*/, RES.loadConfig("resource/assets/common.res.json", "resource/")];
+                        return [4 /*yield*/, RES.loadConfig("resource/" + this.resJsonDic[resName], "resource/")];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, this.loadTheme()];
+                        return [4 /*yield*/, RES.loadGroup(resName, 0, loadingView)];
                     case 2:
                         _a.sent();
-                        return [4 /*yield*/, RES.loadGroup("preload", 0, loadingView)];
+                        this.stage.removeChild(loadingView);
+                        return [4 /*yield*/, this.loadTheme()];
                     case 3:
                         _a.sent();
-                        this.stage.removeChild(loadingView);
                         return [3 /*break*/, 5];
                     case 4:
                         e_1 = _a.sent();
@@ -132,6 +148,8 @@ var Game = (function (_super) {
                 resolve();
             }, _this);
         });
+    };
+    Game.prototype.loadModuleRes = function () {
     };
     Game.prototype.createGameScene = function () {
         var loginViewMediator = new LoginViewMediator();
