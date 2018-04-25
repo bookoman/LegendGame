@@ -1,0 +1,9 @@
+{
+	"skins": {},
+	"autoGenerateExmlsList": true,
+	"exmls": [
+		"resource/skins/LoginViewSkin.exml",
+		"resource/skins/componet/FloatTipSkin.exml"
+	],
+	"path": "resource/all.thm.json"
+}

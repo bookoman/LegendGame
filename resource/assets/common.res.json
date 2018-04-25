@@ -1,0 +1,25 @@
+{
+	"groups": [
+		{
+			"keys": "bg_jpg,button_down_png,button_up_png",
+			"name": "preload"
+		}
+	],
+	"resources": [
+		{
+			"url": "assets/common/bg.jpg",
+			"type": "image",
+			"name": "bg_jpg"
+		},
+		{
+			"url": "assets/common/button_down.png",
+			"type": "image",
+			"name": "button_down_png"
+		},
+		{
+			"url": "assets/common/button_up.png",
+			"type": "image",
+			"name": "button_up_png"
+		}
+	]
+}

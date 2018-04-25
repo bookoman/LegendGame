@@ -1,0 +1,53 @@
+{
+  "engineVersion": "5.1.10",
+  "compilerVersion": "5.1.10",
+  "template": {},
+  "target": {
+    "current": "web"
+  },
+  "eui": {
+    "exmlRoot": [
+      "resource/skins"
+    ],
+    "themes": [
+      "resource/all.thm.json"
+    ],
+    "exmlPublishPolicy": "commonjs"
+  },
+  "modules": [
+    {
+      "name": "egret"
+    },
+    {
+      "name": "eui"
+    },
+    {
+      "name": "assetsmanager"
+    },
+    {
+      "name": "tween"
+    },
+    {
+      "name": "game"
+    },
+    {
+      "name": "socket"
+    },
+    {
+      "name": "dragonBones"
+    },
+    {
+      "name": "promise"
+    }
+  ],
+  "targets": {
+    "ios": {
+      "appname": "LegendGame",
+      "packagename": "com.companyname"
+    },
+    "android": {
+      "appname": "LegendGame",
+      "packagename": "com.companyname"
+    }
+  }
+}

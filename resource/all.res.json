@@ -1,0 +1,20 @@
+{
+	"groups": [
+		{
+			"keys": "game.res_json,common.res_json",
+			"name": "module"
+		}
+	],
+	"resources": [
+		{
+			"url": "assets/common.res.json",
+			"type": "json",
+			"name": "common.res_json"
+		},
+		{
+			"url": "assets/game.res.json",
+			"type": "json",
+			"name": "game.res_json"
+		}
+	]
+}
