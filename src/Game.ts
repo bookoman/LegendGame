@@ -17,6 +17,24 @@ class Game extends eui.UILayer{
             egret.ticker.resume();
         }
 
+         //加载资源文件
+        var loader:egret.URLLoader = new egret.URLLoader();
+        var urlRequest:egret.URLRequest = new egret.URLRequest("resource/all.res.json");
+        loader.load(urlRequest);
+        loader.addEventListener(egret.Event.COMPLETE,this.loadAllResJsonComplete,this);
+    }
+
+    private resJsonDic:Object;
+    private loadAllResJsonComplete(e):void{
+        this.resJsonDic = {};
+        var loader:egret.URLLoader = e.target;
+        loader.removeEventListener(egret.Event.COMPLETE,this.loadAllResJsonComplete,this);
+        var jsonObj = JSON.parse(loader.data);
+        console.log(jsonObj);
+        jsonObj.resources.forEach(resObj => {
+            this.resJsonDic[resObj.name] = resObj.url;
+        });
+
         //inject the custom material parser
         //注入自定义的素材解析器
         let assetAdapter = new AssetAdapter();
@@ -30,8 +48,9 @@ class Game extends eui.UILayer{
     }
 
     private async runGame() {
-        await this.loadResource()
-        // this.createGameScene();
+
+        await this.loadResource("common");
+        this.createGameScene();
         // const result = await RES.getResAsync("description_json")
         // this.startAnimation(result);
         await platform.login();
@@ -39,29 +58,21 @@ class Game extends eui.UILayer{
         console.log(userInfo);
     }
 
-    private async loadResource() {
+    private async loadResource(resName:string) {
         try {
             const loadingView = new LoadingUI();
             this.stage.addChild(loadingView);
-            // await RES.loadConfig("resource/assets/common.res.json", "resource/");
-            RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE,this.onLoaded,this); 
-            RES.loadConfig("resource/all.res.json", "resource/");
-            // await this.loadTheme();
-            // await RES.loadGroup("module");
+            await RES.loadConfig("resource/"+this.resJsonDic[resName], "resource/");
+            await RES.loadGroup(resName, 0, loadingView);
             this.stage.removeChild(loadingView);
+            await this.loadTheme();
         }
         catch (e) {
             console.error(e);
         }
     }
 
-    private onLoaded(e):void{
-        console.log("打印数据:"+e);
-        RES.removeEventListener(RES.ResourceEvent.COMPLETE,this.onLoaded,this);
-        
-        // this.createGameScene();
-    }
-
+    
     private loadTheme() {
         return new Promise((resolve, reject) => {
             // load skin theme configuration file, you can manually modify the file. And replace the default skin.
@@ -72,7 +83,7 @@ class Game extends eui.UILayer{
             }, this);
         })
     }
-    
+
 	private createGameScene():void{
 		var loginViewMediator:LoginViewMediator = new LoginViewMediator();
 		this.addChild(loginViewMediator);
