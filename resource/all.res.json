@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "game.res_json,common.res_json",
+			"keys": "game_res_json,common_res_json",
 			"name": "module"
 		}
 	],
@@ -9,12 +9,12 @@
 		{
 			"url": "assets/common.res.json",
 			"type": "json",
-			"name": "common.res_json"
+			"name": "common_res_json"
 		},
 		{
 			"url": "assets/game.res.json",
 			"type": "json",
-			"name": "game.res_json"
+			"name": "game_res_json"
 		}
 	]
 }

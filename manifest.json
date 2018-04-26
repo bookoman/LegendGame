@@ -12,17 +12,17 @@
 	],
 	"game": [
 		"bin-debug/com/xl/game/core/scene/BaseScene.js",
-		"bin-debug/Game.js",
+		"bin-debug/com/xl/game/control/LoginViewMediator.js",
 		"bin-debug/LoadingUI.js",
 		"bin-debug/Platform.js",
 		"bin-debug/ThemeAdapter.js",
 		"bin-debug/com/xl/game/const/GameConfig.js",
-		"bin-debug/com/xl/game/core/scene/PreLoadScene.js",
+		"bin-debug/Game.js",
 		"bin-debug/com/xl/game/core/LayerManager.js",
 		"bin-debug/com/xl/game/core/SceneMananger.js",
 		"bin-debug/AssetAdapter.js",
 		"bin-debug/com/xl/game/core/scene/GameScene.js",
 		"bin-debug/com/xl/game/core/scene/LoginScene.js",
-		"bin-debug/com/xl/game/control/LoginViewMediator.js"
+		"bin-debug/com/xl/game/core/scene/PreLoadScene.js"
 	]
 }

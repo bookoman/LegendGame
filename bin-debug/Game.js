@@ -73,14 +73,19 @@ var Game = (function (_super) {
             var userInfo;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.loadResource()];
+                    case 0: return [4 /*yield*/, this.loadResource()
+                        // this.createGameScene();
+                        // const result = await RES.getResAsync("description_json")
+                        // this.startAnimation(result);
+                    ];
                     case 1:
                         _a.sent();
-                        this.createGameScene();
+                        // this.createGameScene();
                         // const result = await RES.getResAsync("description_json")
                         // this.startAnimation(result);
                         return [4 /*yield*/, platform.login()];
                     case 2:
+                        // this.createGameScene();
                         // const result = await RES.getResAsync("description_json")
                         // this.startAnimation(result);
                         _a.sent();
@@ -95,32 +100,29 @@ var Game = (function (_super) {
     };
     Game.prototype.loadResource = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var loadingView, e_1;
+            var loadingView;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 4, , 5]);
-                        loadingView = new LoadingUI();
-                        this.stage.addChild(loadingView);
-                        return [4 /*yield*/, RES.loadConfig("resource/assets/common.res.json", "resource/")];
-                    case 1:
-                        _a.sent();
-                        return [4 /*yield*/, this.loadTheme()];
-                    case 2:
-                        _a.sent();
-                        return [4 /*yield*/, RES.loadGroup("preload", 0, loadingView)];
-                    case 3:
-                        _a.sent();
-                        this.stage.removeChild(loadingView);
-                        return [3 /*break*/, 5];
-                    case 4:
-                        e_1 = _a.sent();
-                        console.error(e_1);
-                        return [3 /*break*/, 5];
-                    case 5: return [2 /*return*/];
+                try {
+                    loadingView = new LoadingUI();
+                    this.stage.addChild(loadingView);
+                    // await RES.loadConfig("resource/assets/common.res.json", "resource/");
+                    RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE, this.onLoaded, this);
+                    RES.loadConfig("resource/all.res.json", "resource/");
+                    // await this.loadTheme();
+                    // await RES.loadGroup("module");
+                    this.stage.removeChild(loadingView);
                 }
+                catch (e) {
+                    console.error(e);
+                }
+                return [2 /*return*/];
             });
         });
+    };
+    Game.prototype.onLoaded = function (e) {
+        console.log("打印数据:" + e);
+        RES.removeEventListener(RES.ResourceEvent.COMPLETE, this.onLoaded, this);
+        // this.createGameScene();
     };
     Game.prototype.loadTheme = function () {
         var _this = this;

@@ -31,27 +31,35 @@ class Game extends eui.UILayer{
 
     private async runGame() {
         await this.loadResource()
-        this.createGameScene();
+        // this.createGameScene();
         // const result = await RES.getResAsync("description_json")
         // this.startAnimation(result);
         await platform.login();
         const userInfo = await platform.getUserInfo();
         console.log(userInfo);
-
     }
 
     private async loadResource() {
         try {
             const loadingView = new LoadingUI();
             this.stage.addChild(loadingView);
-            await RES.loadConfig("resource/assets/common.res.json", "resource/");
-            await this.loadTheme();
-            await RES.loadGroup("preload", 0, loadingView);
+            // await RES.loadConfig("resource/assets/common.res.json", "resource/");
+            RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE,this.onLoaded,this); 
+            RES.loadConfig("resource/all.res.json", "resource/");
+            // await this.loadTheme();
+            // await RES.loadGroup("module");
             this.stage.removeChild(loadingView);
         }
         catch (e) {
             console.error(e);
         }
+    }
+
+    private onLoaded(e):void{
+        console.log("打印数据:"+e);
+        RES.removeEventListener(RES.ResourceEvent.COMPLETE,this.onLoaded,this);
+        
+        // this.createGameScene();
     }
 
     private loadTheme() {
@@ -62,10 +70,9 @@ class Game extends eui.UILayer{
             theme.addEventListener(eui.UIEvent.COMPLETE, () => {
                 resolve();
             }, this);
-
         })
     }
-
+    
 	private createGameScene():void{
 		var loginViewMediator:LoginViewMediator = new LoginViewMediator();
 		this.addChild(loginViewMediator);
