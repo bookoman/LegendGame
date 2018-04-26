@@ -8,7 +8,9 @@ class GameScene extends BaseScene{
     }
     public enter():void
     {
-        // new GameMediator([{url:"res/atlas/main.atlas",type:Loader.ATLAS},{url:"test/img_bg.png",type:Loader.IMAGE}]);
+        var resObj = ConfigManager.ins.getResJsonByName("game");
+        var gameViewMediator:GameMediator = new GameMediator(resObj);
+        LayerManager.ins.addToLayer(gameViewMediator,LayerManager.UI_LAYER,false,false,false);
     }
 
     public leave():void

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="GameViewSkin" width="1336" height="640" xmlns:e="http://ns.egret.com/eui">
+	<e:Image source="border_png" x="340" y="273"/>
+</e:Skin>

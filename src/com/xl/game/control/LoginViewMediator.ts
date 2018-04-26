@@ -1,25 +1,24 @@
-class LoginViewMediator extends eui.Component {
+class LoginViewMediator extends BaseMediator {
 	private inputAccount:eui.TextInput;
 	private inputPWD:eui.TextInput;
 	private btnLogin:eui.Button;
-	public constructor() {
-		super();
-		this.skinName = "resource/skins/LoginViewSkin.exml";
+	public constructor(resObj?:Object) {
+		super("resource/skins/LoginViewSkin.exml",resObj);
 	}
-	protected createChildren()
+	protected initView():void
 	{
-		super.createChildren();
-		this.addEvents();
+		super.initView();
 	}
-	private addEvents():void{
+	protected addEvents():void{
 		this.btnLogin.addEventListener(egret.TouchEvent.TOUCH_TAP,this.onBtnLoginClick,this);
 	}
-	private removeEvent():void
+	protected removeEvent():void
 	{
 		this.btnLogin.removeEventListener(egret.TouchEvent.TOUCH_TAP,this.onBtnLoginClick,this);
 	}
 
 	private onBtnLoginClick(e:egret.TouchEvent):void{
-		console.log("登录")
+		console.log("登录");
+		SceneMananger.ins.enter(SceneMananger.GAME_SCENE);
 	}
 }

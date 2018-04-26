@@ -17,7 +17,9 @@ var GameScene = (function (_super) {
         return _super.call(this) || this;
     }
     GameScene.prototype.enter = function () {
-        // new GameMediator([{url:"res/atlas/main.atlas",type:Loader.ATLAS},{url:"test/img_bg.png",type:Loader.IMAGE}]);
+        var resObj = ConfigManager.ins.getResJsonByName("game");
+        var gameViewMediator = new GameMediator(resObj);
+        LayerManager.ins.addToLayer(gameViewMediator, LayerManager.UI_LAYER, false, false, false);
     };
     GameScene.prototype.leave = function () {
         _super.prototype.leave.call(this);

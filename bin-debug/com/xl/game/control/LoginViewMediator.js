@@ -10,14 +10,11 @@ r.prototype = e.prototype, t.prototype = new r();
 };
 var LoginViewMediator = (function (_super) {
     __extends(LoginViewMediator, _super);
-    function LoginViewMediator() {
-        var _this = _super.call(this) || this;
-        _this.skinName = "resource/skins/LoginViewSkin.exml";
-        return _this;
+    function LoginViewMediator(resObj) {
+        return _super.call(this, "resource/skins/LoginViewSkin.exml", resObj) || this;
     }
-    LoginViewMediator.prototype.createChildren = function () {
-        _super.prototype.createChildren.call(this);
-        this.addEvents();
+    LoginViewMediator.prototype.initView = function () {
+        _super.prototype.initView.call(this);
     };
     LoginViewMediator.prototype.addEvents = function () {
         this.btnLogin.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onBtnLoginClick, this);
@@ -27,8 +24,9 @@ var LoginViewMediator = (function (_super) {
     };
     LoginViewMediator.prototype.onBtnLoginClick = function (e) {
         console.log("登录");
+        SceneMananger.ins.enter(SceneMananger.GAME_SCENE);
     };
     return LoginViewMediator;
-}(eui.Component));
+}(BaseMediator));
 __reflect(LoginViewMediator.prototype, "LoginViewMediator");
 //# sourceMappingURL=LoginViewMediator.js.map

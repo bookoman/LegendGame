@@ -2,6 +2,7 @@
 	"skins": {},
 	"autoGenerateExmlsList": true,
 	"exmls": [
+		"resource/skins/GameViewSkin.exml",
 		"resource/skins/LoginViewSkin.exml",
 		"resource/skins/componet/FloatTipSkin.exml"
 	],
