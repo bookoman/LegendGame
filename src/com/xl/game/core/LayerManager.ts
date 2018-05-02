@@ -3,8 +3,8 @@
 * name;
 */
 class LayerManager{
-    /**背景 */
-    public static BG_LAYER:number = 0;
+    /**背景地形 */
+    public static BG_TERRAIN_LAYER:number = 0;
     /**远景 */
     public static BG_FAR_LAYER:number = 1;
     /**背景特效 */
@@ -20,7 +20,7 @@ class LayerManager{
     /**tip层 */
     public static TIP_LAYER:number = 7;
 
-    private bgLayer:MyLayer = null;
+    private bgTerrainLayer:MyLayer = null;
     private bgPreLayer:MyLayer = null;
     private bgNearLayer:MyLayer = null;
     private bgEffectLayer:MyLayer = null;
@@ -43,8 +43,8 @@ class LayerManager{
 
     public init(main:eui.UILayer):void
     {
-        this.bgLayer = new MyLayer();
-        main.addChild(this.bgLayer);
+        this.bgTerrainLayer = new MyLayer();
+        main.addChild(this.bgTerrainLayer);
         this.bgPreLayer = new MyLayer();
         main.addChild(this.bgPreLayer);
         this.bgEffectLayer = new MyLayer();
@@ -82,8 +82,8 @@ class LayerManager{
     {
         switch(layerId)
         {
-            case LayerManager.BG_LAYER:
-                return this.bgLayer;
+            case LayerManager.BG_TERRAIN_LAYER:
+                return this.bgTerrainLayer;
             case LayerManager.BG_FAR_LAYER:
                 return this.bgPreLayer;
             case LayerManager.BG_NEAR_LAYER:
