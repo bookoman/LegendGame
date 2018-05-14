@@ -85,7 +85,7 @@ var Game = (function (_super) {
     };
     Game.prototype.runGame = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var userInfo;
+            var userInfo, sceneTerrain;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -98,6 +98,8 @@ var Game = (function (_super) {
                     case 2:
                         userInfo = _a.sent();
                         console.log(userInfo);
+                        sceneTerrain = new SceneTerrain();
+                        sceneTerrain.create("001", 5600, 5600, 60, 80, 512, 512);
                         return [2 /*return*/];
                 }
             });

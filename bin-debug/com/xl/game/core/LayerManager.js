@@ -14,7 +14,7 @@ r.prototype = e.prototype, t.prototype = new r();
 */
 var LayerManager = (function () {
     function LayerManager() {
-        this.bgLayer = null;
+        this.bgTerrainLayer = null;
         this.bgPreLayer = null;
         this.bgNearLayer = null;
         this.bgEffectLayer = null;
@@ -34,8 +34,8 @@ var LayerManager = (function () {
         configurable: true
     });
     LayerManager.prototype.init = function (main) {
-        this.bgLayer = new MyLayer();
-        main.addChild(this.bgLayer);
+        this.bgTerrainLayer = new MyLayer();
+        main.addChild(this.bgTerrainLayer);
         this.bgPreLayer = new MyLayer();
         main.addChild(this.bgPreLayer);
         this.bgEffectLayer = new MyLayer();
@@ -72,8 +72,8 @@ var LayerManager = (function () {
     };
     LayerManager.prototype.getLayer = function (layerId) {
         switch (layerId) {
-            case LayerManager.BG_LAYER:
-                return this.bgLayer;
+            case LayerManager.BG_TERRAIN_LAYER:
+                return this.bgTerrainLayer;
             case LayerManager.BG_FAR_LAYER:
                 return this.bgPreLayer;
             case LayerManager.BG_NEAR_LAYER:
@@ -90,8 +90,8 @@ var LayerManager = (function () {
                 return this.tipLayer;
         }
     };
-    /**背景 */
-    LayerManager.BG_LAYER = 0;
+    /**背景地形 */
+    LayerManager.BG_TERRAIN_LAYER = 0;
     /**远景 */
     LayerManager.BG_FAR_LAYER = 1;
     /**背景特效 */

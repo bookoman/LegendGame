@@ -52,7 +52,11 @@ class Game extends eui.UILayer{
         await platform.login();
         const userInfo = await platform.getUserInfo();
         console.log(userInfo);
+
+       var sceneTerrain:SceneTerrain = new SceneTerrain();
+       sceneTerrain.create("001",5600,5600,60,80,512,512);
     }
+    
 
     /**主题加载 */
     private loadTheme() {
