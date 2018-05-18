@@ -12,6 +12,8 @@ var MapLayerVo = (function () {
         this.name = layer["name"];
         this.width = layer["width"];
         this.height = layer["height"];
+        this.cellX = layer.properties["cellX"];
+        this.cellY = layer.properties["cellY"];
     };
     return MapLayerVo;
 }());

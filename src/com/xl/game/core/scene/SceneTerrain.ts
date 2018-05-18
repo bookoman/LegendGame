@@ -26,13 +26,17 @@ class SceneTerrain extends egret.Sprite{
 	private maskLayerData:MapLayerVo;
 	/**地形 */
 	private gameCanvase:egret.RenderTexture;
+	/**单个图块 */
+	private cells:Array<MapSimpleLoader> = null;
 
 	public mapId:string;
 	public constructor(gameCanvas?:egret.Sprite) {
 		super();
-		this.gameCanvase = new egret.RenderTexture();
-		
-		LayerManager.ins.addToLayer(new egret.Bitmap(this.gameCanvase),LayerManager.TIP_LAYER,false,false,false);
+		//this.gameCanvase = new egret.RenderTexture();
+		this.scaleX = 0.05;
+		this.scaleY = 0.05;
+		LayerManager.ins.addToLayer(this,LayerManager.TIP_LAYER,false,false,false);
+		this.cells = new Array();
 	}
 
 	public create(mapId:string,mw:number,mh:number,gw:number,gh:number,cellW:number,cellH:number):void
@@ -71,24 +75,43 @@ class SceneTerrain extends egret.Sprite{
 			}
 		});
 
-		
 		this.updateTerain();
     }
 
 	public updateTerain():void
 	{
 		var mapSimpleLoader:MapSimpleLoader;
-		var cellX:number = this.mapLayerData.width;
-		var cellY:number = this.mapLayerData.height;
-		for(var i = 0;i < 21;i++)
+		var cellXs:number = this.mapLayerData.cellX;
+		var cellYs:number = this.mapLayerData.cellY;
+		
+		for(var i = 0;i < cellYs;i++)
 		{
-			for(var j = 0;j < 19;j++)
+			for(var j = 0;j < cellXs;j++)
 			{
-				mapSimpleLoader = new MapSimpleLoader(this.gameCanvase,cellX,cellY,this.cellW,this.cellH);
-				mapSimpleLoader.load(this.mapId,(i+1)* (j+1));
+				mapSimpleLoader = new MapSimpleLoader(this,cellX,cellY,this.cellW,this.cellH);
+				var blockId:number = i * cellX +  j + 1;
+				// console.log("..."+blockId);
+				mapSimpleLoader.load(this.mapId,blockId);
 			}
 		}
 	}
+
+	public onScroll(x:number,y:number):void
+	{
+
+	}
+	private calShowCell(x:number,y:number):void
+	{
+		this.cells.splice(0,this.cells.length);
+
+		var cellX:number = Math.ceil(x / this.cellW);
+		var cellY:number = Math.ceil(y / this.cellH);
+		
+
+	}
+
+
+	
 
 	
 

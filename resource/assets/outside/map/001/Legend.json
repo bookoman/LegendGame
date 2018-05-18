@@ -14,6 +14,16 @@
          "height":129,
          "name":"background",
          "opacity":1,
+         "properties":
+            {
+             "cellX":21,
+             "cellY":19
+            },
+         "propertytypes":
+            {
+             "cellX":"int",
+             "cellY":"int"
+            },
          "type":"tilelayer",
          "visible":true,
          "width":109,
@@ -25,6 +35,16 @@
          "height":129,
          "name":"builder",
          "opacity":1,
+         "properties":
+            {
+             "cellX":21,
+             "cellY":19
+            },
+         "propertytypes":
+            {
+             "cellX":"int",
+             "cellY":"int"
+            },
          "type":"tilelayer",
          "visible":true,
          "width":109,
@@ -36,6 +56,16 @@
          "height":129,
          "name":"mask",
          "opacity":1,
+         "properties":
+            {
+             "cellX":21,
+             "cellY":19
+            },
+         "propertytypes":
+            {
+             "cellX":"int",
+             "cellY":"int"
+            },
          "type":"tilelayer",
          "visible":true,
          "width":109,

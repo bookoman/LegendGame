@@ -6,6 +6,8 @@ class MapLayerVo {
 	public name:string;
 	public width:number;
 	public height:number;
+	public cellX:number;
+	public cellY:number;
 	public constructor() {
 
 	}
@@ -15,6 +17,8 @@ class MapLayerVo {
 		this.name = layer["name"];
 		this.width = layer["width"];
 		this.height = layer["height"];
+		this.cellX = layer.properties["cellX"];
+		this.cellY = layer.properties["cellY"];
 	}
 	
 }

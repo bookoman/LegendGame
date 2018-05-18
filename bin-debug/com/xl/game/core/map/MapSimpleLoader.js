@@ -1,26 +1,16 @@
 var __reflect = (this && this.__reflect) || function (p, c, t) {
     p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
 };
-var __extends = this && this.__extends || function __extends(t, e) { 
- function r() { 
- this.constructor = t;
-}
-for (var i in e) e.hasOwnProperty(i) && (t[i] = e[i]);
-r.prototype = e.prototype, t.prototype = new r();
-};
 /**
  * 地图加载item
  */
-var MapSimpleLoader = (function (_super) {
-    __extends(MapSimpleLoader, _super);
+var MapSimpleLoader = (function () {
     function MapSimpleLoader(canvas, cellX, cellY, cellW, cellH) {
-        var _this = _super.call(this) || this;
-        _this.gameCanvas = canvas;
-        _this.cellX = cellX;
-        _this.cellY = cellY;
-        _this.cellW = cellW;
-        _this.cellH = cellH;
-        return _this;
+        this.gameCanvas = canvas;
+        this.cellX = cellX;
+        this.cellY = cellY;
+        this.cellW = cellW;
+        this.cellH = cellH;
     }
     MapSimpleLoader.prototype.load = function (mapId, blockId) {
         this.blockId = blockId;
@@ -28,18 +18,26 @@ var MapSimpleLoader = (function (_super) {
             this.imgLoader = new ImageLoader();
         }
         this.imgLoader.load("resource/assets/outside/map/" + mapId + "/" + blockId + ".jpg", this.loadComplete, this);
-        console.log("resource/assets/outside/map/" + mapId + "/" + blockId + ".jpg");
+        // console.log("resource/assets/outside/map/"+mapId + "/"+blockId+".jpg");
     };
     MapSimpleLoader.prototype.loadComplete = function (data) {
-        var cx = this.blockId % this.cellX;
-        cx = cx == 0 ? 0 : cx - 1;
-        var cy = this.blockId / this.cellY;
+        var cx = (this.blockId - 1) % this.cellX;
+        var cy = Math.ceil(this.blockId / this.cellX);
         cy = cy == 0 ? 0 : cy - 1;
         var tx = cx * this.cellW;
         var ty = cy * this.cellH;
-        this.gameCanvas.drawToTexture(data, new egret.Rectangle(tx, ty, data.width, data.height));
+        if (this.blockId == 21) {
+            console.log("坐标", tx, ty);
+        }
+        var bitmap = TextureUtil.ins.bitmapdataToBitmap(data);
+        bitmap.x = tx;
+        bitmap.y = ty;
+        this.gameCanvas.addChild(bitmap);
+        // console.log("坐标",tx,ty);
+    };
+    MapSimpleLoader.prototype.dispose = function () {
     };
     return MapSimpleLoader;
-}(egret.Texture));
+}());
 __reflect(MapSimpleLoader.prototype, "MapSimpleLoader");
 //# sourceMappingURL=MapSimpleLoader.js.map

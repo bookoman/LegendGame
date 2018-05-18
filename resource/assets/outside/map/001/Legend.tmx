@@ -10,6 +10,10 @@
   <image source="C:/Users/Administrator/Desktop/pic/pic.jpg" width="6540" height="5160"/>
  </imagelayer>
  <layer name="background" width="109" height="129">
+  <properties>
+   <property name="cellX" type="int" value="21"/>
+   <property name="cellY" type="int" value="19"/>
+  </properties>
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -14075,6 +14079,10 @@
   </data>
  </layer>
  <layer name="builder" width="109" height="129">
+  <properties>
+   <property name="cellX" type="int" value="21"/>
+   <property name="cellY" type="int" value="19"/>
+  </properties>
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -28140,6 +28148,10 @@
   </data>
  </layer>
  <layer name="mask" width="109" height="129">
+  <properties>
+   <property name="cellX" type="int" value="21"/>
+   <property name="cellY" type="int" value="19"/>
+  </properties>
   <data>
    <tile gid="0"/>
    <tile gid="0"/>

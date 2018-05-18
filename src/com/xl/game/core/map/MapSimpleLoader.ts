@@ -1,17 +1,16 @@
 /**
  * 地图加载item
  */
-class MapSimpleLoader extends egret.Texture{
+class MapSimpleLoader{
 	private imgLoader:ImageLoader;
-	private gameCanvas:egret.RenderTexture;
+	private gameCanvas:egret.Sprite;
 	private blockId:number;
 	private cellX:number;
 	private cellY:number;
 	private cellW:number;
 	private cellH:number;
 	
-	public constructor(canvas:egret.RenderTexture,cellX:number,cellY:number,cellW:number,cellH:number) {
-		super();
+	public constructor(canvas:egret.Sprite,cellX:number,cellY:number,cellW:number,cellH:number) {
 		this.gameCanvas = canvas;
 		this.cellX = cellX;
 		this.cellY = cellY;
@@ -30,15 +29,27 @@ class MapSimpleLoader extends egret.Texture{
 	}
 
 	private loadComplete(data):void{
-		var cx:number = this.blockId % this.cellX;
-		cx = cx == 0 ? 0 : cx - 1;
-		var cy:number = this.blockId / this.cellY;
+		var cx:number = (this.blockId - 1) % this.cellX;
+		var cy:number = Math.ceil(this.blockId / this.cellX);
 		cy = cy == 0 ? 0 : cy - 1;
 
 		var tx:number = cx * this.cellW;
 		var ty:number = cy * this.cellH;
+
+		if(this.blockId == 21)
+		{
+			console.log("坐标",tx,ty);
+		}
+		var bitmap:egret.Bitmap = TextureUtil.ins.bitmapdataToBitmap(data);
+		bitmap.x = tx;
+		bitmap.y = ty;
+		this.gameCanvas.addChild(bitmap);
+		// console.log("坐标",tx,ty);
+
+	}
+
+	public dispose():void{
 		
-		this.gameCanvas.drawToTexture(data,new egret.Rectangle(tx,ty,data.width,data.height));
 	}
 
 }
