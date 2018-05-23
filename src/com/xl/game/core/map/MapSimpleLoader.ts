@@ -4,22 +4,26 @@
 class MapSimpleLoader{
 	private imgLoader:ImageLoader;
 	private gameCanvas:egret.Sprite;
-	private blockId:number;
-	private cellX:number;
-	private cellY:number;
+	private cx:number
+	private cy:number
+	private cellXs:number;
+	private cellYs:number;
 	private cellW:number;
 	private cellH:number;
 	
-	public constructor(canvas:egret.Sprite,cellX:number,cellY:number,cellW:number,cellH:number) {
+	public constructor(canvas:egret.Sprite,cx:number,cy:number,cellXs:number,cellYs:number,cellW:number,cellH:number) {
 		this.gameCanvas = canvas;
-		this.cellX = cellX;
-		this.cellY = cellY;
+		this.cx = cx;
+		this.cy = cy;
+		this.cellXs = cellXs;
+		this.cellYs= cellYs;
 		this.cellW = cellW;
 		this.cellH = cellH;
 	}
-	public load(mapId:string,blockId:number):void
+	public load(mapId:string):void
 	{
-		this.blockId = blockId;
+		var blockId:number = this.cy * this.cellXs +  this.cx + 1;
+		
 		if(this.imgLoader == null)
 		{
 			this.imgLoader = new ImageLoader();
@@ -29,17 +33,14 @@ class MapSimpleLoader{
 	}
 
 	private loadComplete(data):void{
-		var cx:number = (this.blockId - 1) % this.cellX;
-		var cy:number = Math.ceil(this.blockId / this.cellX);
-		cy = cy == 0 ? 0 : cy - 1;
+		//var cx:number = (this.blockId - 1) % this.cellXs;
+		//var cy:number = Math.ceil(this.blockId / this.cellXs);
+		//cy = cy == 0 ? 0 : cy - 1;
 
-		var tx:number = cx * this.cellW;
-		var ty:number = cy * this.cellH;
+		var tx:number = this.cx * this.cellW;
+		var ty:number = this.cy * this.cellH;
+		console.log(tx,ty);
 
-		if(this.blockId == 21)
-		{
-			console.log("坐标",tx,ty);
-		}
 		var bitmap:egret.Bitmap = TextureUtil.ins.bitmapdataToBitmap(data);
 		bitmap.x = tx;
 		bitmap.y = ty;

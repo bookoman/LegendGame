@@ -15,6 +15,10 @@ var SceneTerrain = (function (_super) {
     __extends(SceneTerrain, _super);
     function SceneTerrain(gameCanvas) {
         var _this = _super.call(this) || this;
+        //地图切块（上下左右各个方向）x方向显示个数
+        _this.showCellX = 2;
+        //地图切块（上下左右各个方向）y方向显示个数
+        _this.showCellY = 2;
         /**单个图块 */
         _this.cells = null;
         //this.gameCanvase = new egret.RenderTexture();
@@ -58,22 +62,42 @@ var SceneTerrain = (function (_super) {
     };
     SceneTerrain.prototype.updateTerain = function () {
         var mapSimpleLoader;
-        var cellX = this.mapLayerData.cellX;
-        var cellY = this.mapLayerData.cellY;
-        for (var i = 0; i < cellY; i++) {
-            for (var j = 0; j < cellX; j++) {
-                mapSimpleLoader = new MapSimpleLoader(this, cellX, cellY, this.cellW, this.cellH);
-                var blockId = i * cellX + j + 1;
-                // console.log("..."+blockId);
-                mapSimpleLoader.load(this.mapId, blockId);
+        var cellXs = this.mapLayerData.cellX;
+        var cellYs = this.mapLayerData.cellY;
+        for (var i = 0; i < cellYs; i++) {
+            for (var j = 0; j < cellXs; j++) {
+                mapSimpleLoader = new MapSimpleLoader(this, j, i, cellXs, cellYs, this.cellW, this.cellH);
+                mapSimpleLoader.load(this.mapId);
             }
         }
     };
     SceneTerrain.prototype.onScroll = function (x, y) {
     };
+    /**
+     * 计算格子加载数组，人物脚下先加载，然后由上顺时针加载一圈格子，内圈向外圈加载
+     */
     SceneTerrain.prototype.calShowCell = function (x, y) {
+        this.cells.splice(0, this.cells.length);
         var cellX = Math.ceil(x / this.cellW);
-        var cellY = y / this.cellH;
+        var cellY = Math.ceil(y / this.cellH);
+        //加载个数
+        var cellXs = this.showCellX * 2 + 1;
+        var cellYs = this.showCellY * 2 + 1;
+        var mapSimpleLoader;
+        //圈数
+        var circleSum = Math.max(this.showCellX, this.showCellY);
+        for (var i = 1; i <= circleSum; i++) {
+            if (this.showCellX >= i) {
+            }
+            if (this.showCellY <= i) {
+            }
+        }
+        for (var i = 0; i < cellYs; i++) {
+            for (var j = 0; j < cellXs; j++) {
+                mapSimpleLoader = new MapSimpleLoader(this, cellXs, cellYs, i, j, this.cellW, this.cellH);
+                mapSimpleLoader.load(this.mapId);
+            }
+        }
     };
     return SceneTerrain;
 }(egret.Sprite));

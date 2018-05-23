@@ -5,15 +5,17 @@ var __reflect = (this && this.__reflect) || function (p, c, t) {
  * 地图加载item
  */
 var MapSimpleLoader = (function () {
-    function MapSimpleLoader(canvas, cellX, cellY, cellW, cellH) {
+    function MapSimpleLoader(canvas, cx, cy, cellXs, cellYs, cellW, cellH) {
         this.gameCanvas = canvas;
-        this.cellX = cellX;
-        this.cellY = cellY;
+        this.cx = cx;
+        this.cy = cy;
+        this.cellXs = cellXs;
+        this.cellYs = cellYs;
         this.cellW = cellW;
         this.cellH = cellH;
     }
-    MapSimpleLoader.prototype.load = function (mapId, blockId) {
-        this.blockId = blockId;
+    MapSimpleLoader.prototype.load = function (mapId) {
+        var blockId = this.cy * this.cellXs + this.cx + 1;
         if (this.imgLoader == null) {
             this.imgLoader = new ImageLoader();
         }
@@ -21,14 +23,12 @@ var MapSimpleLoader = (function () {
         // console.log("resource/assets/outside/map/"+mapId + "/"+blockId+".jpg");
     };
     MapSimpleLoader.prototype.loadComplete = function (data) {
-        var cx = (this.blockId - 1) % this.cellX;
-        var cy = Math.ceil(this.blockId / this.cellX);
-        cy = cy == 0 ? 0 : cy - 1;
-        var tx = cx * this.cellW;
-        var ty = cy * this.cellH;
-        if (this.blockId == 21) {
-            console.log("坐标", tx, ty);
-        }
+        //var cx:number = (this.blockId - 1) % this.cellXs;
+        //var cy:number = Math.ceil(this.blockId / this.cellXs);
+        //cy = cy == 0 ? 0 : cy - 1;
+        var tx = this.cx * this.cellW;
+        var ty = this.cy * this.cellH;
+        console.log(tx, ty);
         var bitmap = TextureUtil.ins.bitmapdataToBitmap(data);
         bitmap.x = tx;
         bitmap.y = ty;
