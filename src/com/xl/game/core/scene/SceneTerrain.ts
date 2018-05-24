@@ -33,8 +33,8 @@ class SceneTerrain extends egret.Sprite{
 	public constructor(gameCanvas?:egret.Sprite) {
 		super();
 		//this.gameCanvase = new egret.RenderTexture();
-		this.scaleX = 0.05;
-		this.scaleY = 0.05;
+		this.scaleX = 0.1;
+		this.scaleY = 0.1;
 		LayerManager.ins.addToLayer(this,LayerManager.TIP_LAYER,false,false,false);
 		this.cells = new Array();
 	}
@@ -84,14 +84,19 @@ class SceneTerrain extends egret.Sprite{
 		var cellXs:number = this.mapLayerData.cellX;
 		var cellYs:number = this.mapLayerData.cellY;
 		
-		for(var i = 0;i < cellYs;i++)
-		{
-			for(var j = 0;j < cellXs;j++)
-			{
-				mapSimpleLoader = new MapSimpleLoader(this,j , i ,cellXs,cellYs,this.cellW,this.cellH);
-				mapSimpleLoader.load(this.mapId);
-			}
-		} 
+		// for(var i = 0;i < cellYs;i++)
+		// {
+		// 	for(var j = 0;j < cellXs;j++)
+		// 	{
+		// 		mapSimpleLoader = new MapSimpleLoader(this,j , i ,cellXs,cellYs,this.cellW,this.cellH);
+		// 		mapSimpleLoader.load(this.mapId);
+		// 	}
+		// } 
+
+		this.calShowCell(1200,1200);
+		this.cells.forEach(mapSimpleLoader => {
+			mapSimpleLoader.load(this.mapId)
+		});
 	}
 
 	public onScroll(x:number,y:number):void
@@ -104,8 +109,8 @@ class SceneTerrain extends egret.Sprite{
 	private calShowCell(x:number,y:number):void
 	{
 		this.cells.splice(0,this.cells.length);
-		var centerCellX:number = Math.ceil(x / this.cellW);
-		var centerCellY:number = Math.ceil(y / this.cellH);
+		var centerCellX:number = Math.floor(x / this.cellW);
+		var centerCellY:number = Math.floor(y / this.cellH);
 		//加载个数
 		var cellXs:number = this.showCellX * 2 + 1;
 		var cellYs:number = this.showCellY * 2 + 1;
@@ -117,27 +122,51 @@ class SceneTerrain extends egret.Sprite{
 		var cellY:number;
 		var edge:number = 1;//边个数
 		var sum:number = 0;//一圈总数
-		
 		for(var i = 1;i <= circleSum; i++)
 		{
-			cellX = i <= this.showCellX ? i : this.showCellX;
-			cellY = i <= this.showCellY ? i : this.showCellY;
+			
 			edge = edge + 2;
 			sum = edge * 4 - 4;
-			
 			for(var j = 0;j < sum; j++)
 			{
-
-				if(cellX <= (edge - 1) / 2)
+				if(j < edge)
 				{
-					
+					if(j == 0)
+					{
+						cellX = centerCellX - Math.max(1,(edge - 1) / 2);
+						cellY = centerCellY - i * 1;
+					}
+					else
+					{
+						cellX++;
+					}
+				}
+				else if(j < 2 * edge - 1)
+				{
+					cellY++;
+				}
+				else if(j < 3 * edge - 2)
+				{
+					cellX--;
+				}
+				else if(j < 4 * edge - 3)
+				{
+					cellY--;
+				}
+				//超出显示边界判断
+				if(cellX > this.showCellX + centerCellX || i > this.showCellY + centerCellY)
+				{
+					continue;
+				}
+				//超出地图边界判断
+				if(cellX < 0 || cellY < 0 || cellX * this.cellW > this.mw || cellY * this.cellH > this.mh)
+				{
+					continue;
 				}
 
-				cellX = centerCellX;
-				cellY = centerCellY - 1;
-				
-
-				
+				mapSimpleLoader = new MapSimpleLoader(this,cellX,cellY,cellXs,cellYs,this.cellW,this.cellH); 
+				this.cells.push(mapSimpleLoader);
+				console.log(cellX,cellY);
 			}
 		}
 

@@ -22,8 +22,8 @@ var SceneTerrain = (function (_super) {
         /**单个图块 */
         _this.cells = null;
         //this.gameCanvase = new egret.RenderTexture();
-        _this.scaleX = 0.05;
-        _this.scaleY = 0.05;
+        _this.scaleX = 0.1;
+        _this.scaleY = 0.1;
         LayerManager.ins.addToLayer(_this, LayerManager.TIP_LAYER, false, false, false);
         _this.cells = new Array();
         return _this;
@@ -61,15 +61,22 @@ var SceneTerrain = (function (_super) {
         this.updateTerain();
     };
     SceneTerrain.prototype.updateTerain = function () {
+        var _this = this;
         var mapSimpleLoader;
         var cellXs = this.mapLayerData.cellX;
         var cellYs = this.mapLayerData.cellY;
-        for (var i = 0; i < cellYs; i++) {
-            for (var j = 0; j < cellXs; j++) {
-                mapSimpleLoader = new MapSimpleLoader(this, j, i, cellXs, cellYs, this.cellW, this.cellH);
-                mapSimpleLoader.load(this.mapId);
-            }
-        }
+        // for(var i = 0;i < cellYs;i++)
+        // {
+        // 	for(var j = 0;j < cellXs;j++)
+        // 	{
+        // 		mapSimpleLoader = new MapSimpleLoader(this,j , i ,cellXs,cellYs,this.cellW,this.cellH);
+        // 		mapSimpleLoader.load(this.mapId);
+        // 	}
+        // } 
+        this.calShowCell(1200, 1200);
+        this.cells.forEach(function (mapSimpleLoader) {
+            mapSimpleLoader.load(_this.mapId);
+        });
     };
     SceneTerrain.prototype.onScroll = function (x, y) {
     };
@@ -78,24 +85,52 @@ var SceneTerrain = (function (_super) {
      */
     SceneTerrain.prototype.calShowCell = function (x, y) {
         this.cells.splice(0, this.cells.length);
-        var cellX = Math.ceil(x / this.cellW);
-        var cellY = Math.ceil(y / this.cellH);
+        var centerCellX = Math.floor(x / this.cellW);
+        var centerCellY = Math.floor(y / this.cellH);
         //加载个数
         var cellXs = this.showCellX * 2 + 1;
         var cellYs = this.showCellY * 2 + 1;
-        var mapSimpleLoader;
+        var mapSimpleLoader = new MapSimpleLoader(this, centerCellX, centerCellY, cellXs, cellYs, this.cellW, this.cellH);
+        this.cells.push(mapSimpleLoader);
         //圈数
         var circleSum = Math.max(this.showCellX, this.showCellY);
+        var cellX;
+        var cellY;
+        var edge = 1; //边个数
+        var sum = 0; //一圈总数
         for (var i = 1; i <= circleSum; i++) {
-            if (this.showCellX >= i) {
-            }
-            if (this.showCellY <= i) {
-            }
-        }
-        for (var i = 0; i < cellYs; i++) {
-            for (var j = 0; j < cellXs; j++) {
-                mapSimpleLoader = new MapSimpleLoader(this, cellXs, cellYs, i, j, this.cellW, this.cellH);
-                mapSimpleLoader.load(this.mapId);
+            edge = edge + 2;
+            sum = edge * 4 - 4;
+            for (var j = 0; j < sum; j++) {
+                if (j < edge) {
+                    if (j == 0) {
+                        cellX = centerCellX - Math.max(1, (edge - 1) / 2);
+                        cellY = centerCellY - i * 1;
+                    }
+                    else {
+                        cellX++;
+                    }
+                }
+                else if (j < 2 * edge - 1) {
+                    cellY++;
+                }
+                else if (j < 3 * edge - 2) {
+                    cellX--;
+                }
+                else if (j < 4 * edge - 3) {
+                    cellY--;
+                }
+                //超出显示边界判断
+                if (cellX > this.showCellX + centerCellX || i > this.showCellY + centerCellY) {
+                    continue;
+                }
+                //超出地图边界判断
+                if (cellX < 0 || cellY < 0 || cellX * this.cellW > this.mw || cellY * this.cellH > this.mh) {
+                    continue;
+                }
+                mapSimpleLoader = new MapSimpleLoader(this, cellX, cellY, cellXs, cellYs, this.cellW, this.cellH);
+                this.cells.push(mapSimpleLoader);
+                console.log(cellX, cellY);
             }
         }
     };

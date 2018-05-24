@@ -28,7 +28,7 @@ var MapSimpleLoader = (function () {
         //cy = cy == 0 ? 0 : cy - 1;
         var tx = this.cx * this.cellW;
         var ty = this.cy * this.cellH;
-        console.log(tx, ty);
+        // console.log(tx,ty);
         var bitmap = TextureUtil.ins.bitmapdataToBitmap(data);
         bitmap.x = tx;
         bitmap.y = ty;

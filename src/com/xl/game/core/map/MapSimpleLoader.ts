@@ -39,7 +39,7 @@ class MapSimpleLoader{
 
 		var tx:number = this.cx * this.cellW;
 		var ty:number = this.cy * this.cellH;
-		console.log(tx,ty);
+		// console.log(tx,ty);
 
 		var bitmap:egret.Bitmap = TextureUtil.ins.bitmapdataToBitmap(data);
 		bitmap.x = tx;
