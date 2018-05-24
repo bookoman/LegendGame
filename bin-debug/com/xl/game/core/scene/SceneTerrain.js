@@ -61,10 +61,9 @@ var SceneTerrain = (function (_super) {
         this.updateTerain();
     };
     SceneTerrain.prototype.updateTerain = function () {
-        var _this = this;
-        var mapSimpleLoader;
-        var cellXs = this.mapLayerData.cellX;
-        var cellYs = this.mapLayerData.cellY;
+        // var mapSimpleLoader:MapSimpleLoader;
+        // var cellXs:number = this.mapLayerData.cellX;
+        // var cellYs:number = this.mapLayerData.cellY;
         // for(var i = 0;i < cellYs;i++)
         // {
         // 	for(var j = 0;j < cellXs;j++)
@@ -73,7 +72,8 @@ var SceneTerrain = (function (_super) {
         // 		mapSimpleLoader.load(this.mapId);
         // 	}
         // } 
-        this.calShowCell(1200, 1200);
+        var _this = this;
+        this.calShowCell(2200, 2200);
         this.cells.forEach(function (mapSimpleLoader) {
             mapSimpleLoader.load(_this.mapId);
         });
@@ -88,8 +88,8 @@ var SceneTerrain = (function (_super) {
         var centerCellX = Math.floor(x / this.cellW);
         var centerCellY = Math.floor(y / this.cellH);
         //加载个数
-        var cellXs = this.showCellX * 2 + 1;
-        var cellYs = this.showCellY * 2 + 1;
+        var cellXs = this.mapLayerData.cellX;
+        var cellYs = this.mapLayerData.cellY;
         var mapSimpleLoader = new MapSimpleLoader(this, centerCellX, centerCellY, cellXs, cellYs, this.cellW, this.cellH);
         this.cells.push(mapSimpleLoader);
         //圈数

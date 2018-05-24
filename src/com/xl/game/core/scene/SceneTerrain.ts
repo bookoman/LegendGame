@@ -80,10 +80,9 @@ class SceneTerrain extends egret.Sprite{
 
 	public updateTerain():void
 	{
-		var mapSimpleLoader:MapSimpleLoader;
-		var cellXs:number = this.mapLayerData.cellX;
-		var cellYs:number = this.mapLayerData.cellY;
-		
+		// var mapSimpleLoader:MapSimpleLoader;
+		// var cellXs:number = this.mapLayerData.cellX;
+		// var cellYs:number = this.mapLayerData.cellY;
 		// for(var i = 0;i < cellYs;i++)
 		// {
 		// 	for(var j = 0;j < cellXs;j++)
@@ -93,7 +92,7 @@ class SceneTerrain extends egret.Sprite{
 		// 	}
 		// } 
 
-		this.calShowCell(1200,1200);
+		this.calShowCell(2200,2200);
 		this.cells.forEach(mapSimpleLoader => {
 			mapSimpleLoader.load(this.mapId)
 		});
@@ -112,8 +111,8 @@ class SceneTerrain extends egret.Sprite{
 		var centerCellX:number = Math.floor(x / this.cellW);
 		var centerCellY:number = Math.floor(y / this.cellH);
 		//加载个数
-		var cellXs:number = this.showCellX * 2 + 1;
-		var cellYs:number = this.showCellY * 2 + 1;
+		var cellXs:number = this.mapLayerData.cellX;
+		var cellYs:number = this.mapLayerData.cellY;
 		var mapSimpleLoader:MapSimpleLoader = new MapSimpleLoader(this,centerCellX,centerCellY,cellXs,cellYs,this.cellW,this.cellH);
 		this.cells.push(mapSimpleLoader);
 		//圈数

@@ -29,7 +29,7 @@ class MapSimpleLoader{
 			this.imgLoader = new ImageLoader();
 		}
 		this.imgLoader.load("resource/assets/outside/map/"+mapId + "/"+blockId+".jpg",this.loadComplete,this);
-		// console.log("resource/assets/outside/map/"+mapId + "/"+blockId+".jpg");
+		console.log("resource/assets/outside/map/"+mapId + "/"+blockId+".jpg");
 	}
 
 	private loadComplete(data):void{
