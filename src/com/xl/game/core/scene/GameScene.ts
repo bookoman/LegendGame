@@ -8,9 +8,10 @@ class GameScene extends BaseScene{
     }
     public enter():void
     {
-        var resObj = ConfigManager.ins.getResJsonByName("game");
-        var gameViewMediator:GameMediator = new GameMediator(resObj);
+        var gameViewMediator:GameMediator = new GameMediator("game");
         LayerManager.ins.addToLayer(gameViewMediator,LayerManager.UI_LAYER,false,false,false);
+
+        SceneMananger.ins.initGameScene("1");
     }
 
     public leave():void

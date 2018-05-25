@@ -1,9 +1,9 @@
 /*
 * name;
 */
-class BaseScene{
+class BaseScene extends egret.Sprite{
     constructor(){
-        
+        super();
     }
     public enter():void
     {

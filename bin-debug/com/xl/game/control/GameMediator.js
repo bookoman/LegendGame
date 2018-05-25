@@ -10,11 +10,12 @@ r.prototype = e.prototype, t.prototype = new r();
 };
 var GameMediator = (function (_super) {
     __extends(GameMediator, _super);
-    function GameMediator(resObj) {
-        return _super.call(this, "resource/skins/GameViewSkin.exml", resObj) || this;
+    function GameMediator(modlueName) {
+        return _super.call(this, "resource/skins/GameViewSkin.exml", modlueName) || this;
     }
     GameMediator.prototype.initView = function () {
         _super.prototype.initView.call(this);
+        console.log("game.....", RES.getRes("border_png"));
     };
     GameMediator.prototype.addEvents = function () {
     };

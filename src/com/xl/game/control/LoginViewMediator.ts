@@ -2,12 +2,13 @@ class LoginViewMediator extends BaseMediator {
 	private inputAccount:eui.TextInput;
 	private inputPWD:eui.TextInput;
 	private btnLogin:eui.Button;
-	public constructor(resObj?:Object) {
-		super("resource/skins/LoginViewSkin.exml",resObj);
+	public constructor(modlueName?:string) {
+		super("resource/skins/LoginViewSkin.exml",modlueName);
 	}
 	protected initView():void
 	{
 		super.initView();
+		console.log("login.....",RES.getRes("bg_jpg"));
 	}
 	protected addEvents():void{
 		this.btnLogin.addEventListener(egret.TouchEvent.TOUCH_TAP,this.onBtnLoginClick,this);

@@ -10,11 +10,12 @@ r.prototype = e.prototype, t.prototype = new r();
 };
 var LoginViewMediator = (function (_super) {
     __extends(LoginViewMediator, _super);
-    function LoginViewMediator(resObj) {
-        return _super.call(this, "resource/skins/LoginViewSkin.exml", resObj) || this;
+    function LoginViewMediator(modlueName) {
+        return _super.call(this, "resource/skins/LoginViewSkin.exml", modlueName) || this;
     }
     LoginViewMediator.prototype.initView = function () {
         _super.prototype.initView.call(this);
+        console.log("login.....", RES.getRes("bg_jpg"));
     };
     LoginViewMediator.prototype.addEvents = function () {
         this.btnLogin.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onBtnLoginClick, this);

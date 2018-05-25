@@ -1,7 +1,7 @@
 /**
  * 地形
  */
-class SceneTerrain extends egret.Sprite{
+class TerrainScene extends BaseScene{
 	//地图宽
 	private mw:number;
 	//地图高
@@ -165,14 +165,17 @@ class SceneTerrain extends egret.Sprite{
 
 				mapSimpleLoader = new MapSimpleLoader(this,cellX,cellY,cellXs,cellYs,this.cellW,this.cellH); 
 				this.cells.push(mapSimpleLoader);
-				console.log(cellX,cellY);
+				// console.log(cellX,cellY);
 			}
 		}
 
 	}
 
 
-
+	public dispose():void
+	{
+		
+	}
 
 
 	

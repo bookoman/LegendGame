@@ -32,6 +32,7 @@ var SceneMananger = (function () {
                 this.curScene = new LoginScene();
                 break;
             case SceneMananger.GAME_SCENE:
+                this.sceneTerrain = new TerrainScene();
                 this.curScene = new GameScene();
                 break;
         }
@@ -42,11 +43,26 @@ var SceneMananger = (function () {
         if (this.curScene) {
             this.curScene.leave();
             this.curScene = null;
+            if (this.curScene) {
+                this.sceneTerrain.dispose();
+                this.sceneTerrain = null;
+            }
         }
+    };
+    /**
+     * 初始化游戏场景
+     */
+    SceneMananger.prototype.initGameScene = function (mapID) {
+        var config = ConfigManager.ins.getMapConfigById(mapID);
+        GameConfig.MAP_GRID_WIDTH = config.gw;
+        GameConfig.MAP_GRID_HEIGHT = config.gh;
+        this.sceneTerrain.create(config.mapID, config.mw, config.mh, config.gw, config.gh, config.cellW, config.cellH);
+        RoleManager.ins.initRole("10000");
     };
     SceneMananger.PRE_LOAD_SCENE = 1;
     SceneMananger.LOGIN_SCENE = 2;
     SceneMananger.GAME_SCENE = 3;
+    SceneMananger.TERRAIN_SCENE = 4;
     SceneMananger._ins = null;
     return SceneMananger;
 }());
