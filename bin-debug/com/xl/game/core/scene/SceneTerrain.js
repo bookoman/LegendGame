@@ -130,7 +130,7 @@ var SceneTerrain = (function (_super) {
                 }
                 mapSimpleLoader = new MapSimpleLoader(this, cellX, cellY, cellXs, cellYs, this.cellW, this.cellH);
                 this.cells.push(mapSimpleLoader);
-                console.log(cellX, cellY);
+                // console.log(cellX,cellY);
             }
         }
     };

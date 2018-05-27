@@ -7,6 +7,10 @@ var __reflect = (this && this.__reflect) || function (p, c, t) {
 var SceneMananger = (function () {
     function SceneMananger() {
         this.curScene = null;
+        var time = new egret.Timer(1000);
+        time.addEventListener(egret.TimerEvent.TIMER, this.timerFunc, this);
+        // time.addEventListener(egret.TimerEvent.TIMER_COMPLETE, this.timerComFunc, this);
+        time.start();
     }
     Object.defineProperty(SceneMananger, "ins", {
         get: function () {
@@ -43,6 +47,12 @@ var SceneMananger = (function () {
             this.curScene.leave();
             this.curScene = null;
         }
+    };
+    SceneMananger.prototype.timerFunc = function () {
+        console.log("........");
+    };
+    SceneMananger.prototype.timerComFunc = function () {
+        console.log("======");
     };
     SceneMananger.PRE_LOAD_SCENE = 1;
     SceneMananger.LOGIN_SCENE = 2;

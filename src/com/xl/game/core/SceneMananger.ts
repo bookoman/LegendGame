@@ -8,7 +8,9 @@ class SceneMananger{
 
     private curScene:BaseScene = null;
     constructor(){
-        
+        var time:egret.Timer = new egret.Timer(1000);
+        time.addEventListener(egret.TimerEvent.TIMER, this.timerFunc, this);
+        time.start();
     }
     private static _ins:SceneMananger = null;
     public static get ins():SceneMananger{
@@ -30,6 +32,7 @@ class SceneMananger{
         {
             case SceneMananger.PRE_LOAD_SCENE:
                 this.curScene = new PreLoadScene();
+               
                 break;
             case SceneMananger.LOGIN_SCENE:
                 this.curScene = new LoginScene();
@@ -50,5 +53,12 @@ class SceneMananger{
             this.curScene = null;
         }
     }
+
+    private timerFunc():void
+    {
+        console.log("........")
+    }
+   
+
 
 }
