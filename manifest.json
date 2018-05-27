@@ -12,9 +12,9 @@
 	],
 	"game": [
 		"bin-debug/com/xl/game/control/BaseMediator.js",
-		"bin-debug/com/xl/game/core/role/BaseRole.js",
 		"bin-debug/com/xl/game/core/scene/BaseScene.js",
 		"bin-debug/com/xl/game/core/loader/BaseLoader.js",
+		"bin-debug/com/xl/game/core/role/BaseRole.js",
 		"bin-debug/com/xl/game/core/loader/ImageLoader.js",
 		"bin-debug/com/xl/game/const/GameConfig.js",
 		"bin-debug/AssetAdapter.js",
@@ -25,7 +25,7 @@
 		"bin-debug/com/xl/game/core/RoleManager.js",
 		"bin-debug/com/xl/game/core/SceneMananger.js",
 		"bin-debug/LoadingUI.js",
-		"bin-debug/com/xl/game/core/util/TextureUtil.js",
+		"bin-debug/Game.js",
 		"bin-debug/com/xl/game/core/loader/TextLoader.js",
 		"bin-debug/com/xl/game/core/map/MapGrid.js",
 		"bin-debug/com/xl/game/core/map/MapLayerVo.js",
@@ -39,6 +39,6 @@
 		"bin-debug/com/xl/game/core/scene/PreLoadScene.js",
 		"bin-debug/com/xl/game/core/scene/TerrainScene.js",
 		"bin-debug/com/xl/game/core/util/CommonUtil.js",
-		"bin-debug/Game.js"
+		"bin-debug/com/xl/game/core/util/TextureUtil.js"
 	]
 }
