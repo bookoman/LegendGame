@@ -16,6 +16,10 @@
             {
                 "configPath": "resource/assets/animation.res.json",
                 "relativePath": "resource/"
+            },
+            {
+                "configPath": "resource/assets/animation.res.json",
+                "relativePath": "resource/"
             }
         ]
     },

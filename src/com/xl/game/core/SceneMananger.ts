@@ -34,11 +34,6 @@ class SceneMananger{
         {
             case SceneMananger.PRE_LOAD_SCENE:
                 this.curScene = new PreLoadScene();
-<<<<<<< HEAD
-               
-=======
-                
->>>>>>> 580292a5585fdded6e457b985948e03a2095ac9c
                 break;
             case SceneMananger.LOGIN_SCENE:
                 this.curScene = new LoginScene();

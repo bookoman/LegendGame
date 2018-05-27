@@ -35,8 +35,7 @@ var BaseRole = (function (_super) {
         //添加资源组加载进度事件
         RES.addEventListener(RES.ResourceEvent.GROUP_PROGRESS, this.onResourceProgress, this);
         //开始加载 preload 资源组
-        // RES.loadGroup("role"+this.roleID);
-        RES.loadGroup("test");
+        RES.loadGroup("role" + this.roleID);
     };
     BaseRole.prototype.onResourceLoadComplete = function () {
         //添加资源组加载完成事件
