@@ -7,8 +7,8 @@ class LoginScene extends BaseScene{
     }
     public enter():void
     {
-        var obj = ConfigManager.ins.getResJsonByName("common");
-		var loginViewMediator:LoginViewMediator = new LoginViewMediator(obj);
+        
+		var loginViewMediator:LoginViewMediator = new LoginViewMediator("common");
 		LayerManager.ins.addToLayer(loginViewMediator,LayerManager.UI_LAYER,false,false,false);
     }
 

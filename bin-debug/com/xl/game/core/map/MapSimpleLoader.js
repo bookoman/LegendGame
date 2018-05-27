@@ -20,6 +20,7 @@ var MapSimpleLoader = (function () {
             this.imgLoader = new ImageLoader();
         }
         this.imgLoader.load("resource/assets/outside/map/" + mapId + "/" + blockId + ".jpg", this.loadComplete, this);
+        // console.log("resource/assets/outside/map/"+mapId + "/"+blockId+".jpg");
     };
     MapSimpleLoader.prototype.loadComplete = function (data) {
         //var cx:number = (this.blockId - 1) % this.cellXs;

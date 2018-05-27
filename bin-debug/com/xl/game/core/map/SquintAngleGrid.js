@@ -31,8 +31,8 @@ var SquintAngleGrid = (function () {
     SquintAngleGrid.prototype.initGrid = function () {
         this.mapGridAry = [];
         //格子坐标计算
-        var gridXNum = Math.floor(this.mapWid / GameConfig.LINEUP_GRID_WIDTH);
-        var gridYNum = Math.floor(this.mapHei / GameConfig.LINEUP_GRID_HEIGHT);
+        var gridXNum = Math.floor(this.mapWid / GameConfig.MAP_GRID_WIDTH);
+        var gridYNum = Math.floor(this.mapHei / GameConfig.MAP_GRID_HEIGHT);
         //格子y方向个数计算公式，y = n + (n - 1)
         gridYNum = gridYNum + gridYNum - 1;
         var grid;
@@ -56,7 +56,7 @@ var SquintAngleGrid = (function () {
      * @param y 舞台坐标y
      */
     SquintAngleGrid.prototype.getGx = function (x, y) {
-        return (x / GameConfig.LINEUP_GRID_WIDTH) - (y & 1) * (GameConfig.LINEUP_GRID_WIDTH / 2);
+        return (x / GameConfig.MAP_GRID_WIDTH) - (y & 1) * (GameConfig.MAP_GRID_WIDTH / 2);
     };
     /**
      *
@@ -64,7 +64,7 @@ var SquintAngleGrid = (function () {
      * @param y 舞台坐标y
      */
     SquintAngleGrid.prototype.getGy = function (x, y) {
-        return (2 * y) / GameConfig.LINEUP_GRID_HEIGHT;
+        return (2 * y) / GameConfig.MAP_GRID_HEIGHT;
     };
     /**
      * 根据格子坐标得到舞台坐标（格子中心点）
@@ -72,8 +72,8 @@ var SquintAngleGrid = (function () {
      * @param gy
      */
     SquintAngleGrid.prototype.gridToViewPoint = function (gx, gy) {
-        var px = gx * GameConfig.LINEUP_GRID_WIDTH + (gy & 1) * (GameConfig.LINEUP_GRID_WIDTH / 2);
-        var py = gy * GameConfig.LINEUP_GRID_HEIGHT / 2;
+        var px = gx * GameConfig.MAP_GRID_WIDTH + (gy & 1) * (GameConfig.MAP_GRID_WIDTH / 2);
+        var py = gy * GameConfig.MAP_GRID_HEIGHT / 2;
         return new egret.Point(px, py);
     };
     SquintAngleGrid.prototype.dispose = function () {

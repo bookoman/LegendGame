@@ -6,6 +6,10 @@ var __reflect = (this && this.__reflect) || function (p, c, t) {
  */
 var ConfigManager = (function () {
     function ConfigManager() {
+        this.mapCofing = {
+            "1": { "mapID": "1", "name": "主城", "mw": 10500, "mh": 9440, "gw": 60, "gh": 80, "cellW": 512, "cellH": 512 },
+            "2": { "mapID": "2", "name": "血缘", "mw": 10500, "mh": 9440, "gw": 60, "gh": 80, "cellW": 512, "cellH": 512 }
+        };
     }
     Object.defineProperty(ConfigManager, "ins", {
         get: function () {
@@ -31,6 +35,9 @@ var ConfigManager = (function () {
     };
     ConfigManager.prototype.getResJsonByName = function (name) {
         return this.allResJsonDic[name];
+    };
+    ConfigManager.prototype.getMapConfigById = function (id) {
+        return this.mapCofing[id];
     };
     ConfigManager._ins = null;
     return ConfigManager;

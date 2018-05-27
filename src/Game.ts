@@ -33,7 +33,6 @@ class Game extends eui.UILayer{
         var loader:egret.URLLoader = e.target;
         loader.removeEventListener(egret.Event.COMPLETE,this.loadAllResJsonComplete,this);
         var jsonObj = JSON.parse(loader.data);
-        console.log(jsonObj);
         ConfigManager.ins.saveAllResJson(jsonObj.resources);
 
         //inject the custom material parser
@@ -52,9 +51,6 @@ class Game extends eui.UILayer{
         await platform.login();
         const userInfo = await platform.getUserInfo();
         console.log(userInfo);
-
-       var sceneTerrain:SceneTerrain = new SceneTerrain();
-       sceneTerrain.create("001",5600,5600,60,80,512,512);
     }
     
 

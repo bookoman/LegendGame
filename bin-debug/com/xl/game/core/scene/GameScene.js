@@ -17,9 +17,9 @@ var GameScene = (function (_super) {
         return _super.call(this) || this;
     }
     GameScene.prototype.enter = function () {
-        var resObj = ConfigManager.ins.getResJsonByName("game");
-        var gameViewMediator = new GameMediator(resObj);
+        var gameViewMediator = new GameMediator("game");
         LayerManager.ins.addToLayer(gameViewMediator, LayerManager.UI_LAYER, false, false, false);
+        SceneMananger.ins.initGameScene("1");
     };
     GameScene.prototype.leave = function () {
         _super.prototype.leave.call(this);

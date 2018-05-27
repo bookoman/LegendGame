@@ -39,8 +39,8 @@ class SquintAngleGrid{
     {
         this.mapGridAry = [];
         //格子坐标计算
-        var gridXNum:number = Math.floor(this.mapWid / GameConfig.LINEUP_GRID_WIDTH);
-        var gridYNum:number = Math.floor(this.mapHei / GameConfig.LINEUP_GRID_HEIGHT);
+        var gridXNum:number = Math.floor(this.mapWid / GameConfig.MAP_GRID_WIDTH);
+        var gridYNum:number = Math.floor(this.mapHei / GameConfig.MAP_GRID_HEIGHT);
         //格子y方向个数计算公式，y = n + (n - 1)
         gridYNum = gridYNum + gridYNum - 1;
         var grid:MapGrid;
@@ -70,7 +70,7 @@ class SquintAngleGrid{
      */
     private getGx(x:number,y:number):number   
     {  
-         return ( x / GameConfig.LINEUP_GRID_WIDTH) - ( y & 1 ) * ( GameConfig.LINEUP_GRID_WIDTH / 2 ); 
+         return ( x / GameConfig.MAP_GRID_WIDTH) - ( y & 1 ) * ( GameConfig.MAP_GRID_WIDTH / 2 ); 
     }  
     /**
      * 
@@ -80,7 +80,7 @@ class SquintAngleGrid{
     private getGy(x:number,y:number)   
     {  
         
-         return  (2 * y) / GameConfig.LINEUP_GRID_HEIGHT;   
+         return  (2 * y) / GameConfig.MAP_GRID_HEIGHT;   
     }
 
     /**
@@ -90,8 +90,8 @@ class SquintAngleGrid{
      */
     public gridToViewPoint(gx:number,gy:number):egret.Point
     {
-        var px = gx * GameConfig.LINEUP_GRID_WIDTH + ( gy & 1) * ( GameConfig.LINEUP_GRID_WIDTH / 2 );
-        var py = gy * GameConfig.LINEUP_GRID_HEIGHT / 2; 
+        var px = gx * GameConfig.MAP_GRID_WIDTH + ( gy & 1) * ( GameConfig.MAP_GRID_WIDTH / 2 );
+        var py = gy * GameConfig.MAP_GRID_HEIGHT / 2; 
         return new egret.Point(px,py);
     }
 

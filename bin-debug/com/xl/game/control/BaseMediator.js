@@ -10,15 +10,16 @@ r.prototype = e.prototype, t.prototype = new r();
 };
 var BaseMediator = (function (_super) {
     __extends(BaseMediator, _super);
-    function BaseMediator(skinClass, resObj) {
+    function BaseMediator(skinClass, moduleName) {
         var _this = _super.call(this) || this;
         _this.skinClass = skinClass;
-        if (resObj) {
-            _this.resObj = resObj;
+        if (moduleName) {
+            _this.moduleName = moduleName;
+            var obj = ConfigManager.ins.getResJsonByName(moduleName);
             _this.loadingView = new LoadingUI();
             LayerManager.ins.addToLayer(_this.loadingView, LayerManager.TIP_LAYER, true, false, true);
             RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE, _this.loadREsCompleted, _this);
-            RES.loadConfig("resource/" + _this.resObj.url, "resource/");
+            RES.loadConfig("resource/" + obj.url, "resource/");
         }
         else {
             _this.initSkin();
@@ -26,9 +27,23 @@ var BaseMediator = (function (_super) {
         return _this;
     }
     BaseMediator.prototype.loadREsCompleted = function () {
-        RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE, this.loadREsCompleted, this);
+        RES.removeEventListener(RES.ResourceEvent.CONFIG_COMPLETE, this.loadREsCompleted, this);
+        //添加资源组加载完成事件
+        RES.addEventListener(RES.ResourceEvent.GROUP_COMPLETE, this.onResourceLoadComplete, this);
+        //添加资源组加载进度事件
+        RES.addEventListener(RES.ResourceEvent.GROUP_PROGRESS, this.onResourceProgress, this);
+        //开始加载 preload 资源组
+        RES.loadGroup(this.moduleName);
+    };
+    BaseMediator.prototype.onResourceLoadComplete = function () {
+        //添加资源组加载完成事件
+        RES.removeEventListener(RES.ResourceEvent.GROUP_COMPLETE, this.onResourceLoadComplete, this);
+        //添加资源组加载进度事件
+        RES.removeEventListener(RES.ResourceEvent.GROUP_PROGRESS, this.onResourceProgress, this);
         LayerManager.ins.removeToLyaer(this.loadingView, LayerManager.TIP_LAYER, true, false);
         this.initSkin();
+    };
+    BaseMediator.prototype.onResourceProgress = function () {
     };
     BaseMediator.prototype.initSkin = function () {
         this.addEventListener(eui.UIEvent.COMPLETE, this.onSkinComplete, this);

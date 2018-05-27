@@ -11,9 +11,9 @@ r.prototype = e.prototype, t.prototype = new r();
 /**
  * 地形
  */
-var SceneTerrain = (function (_super) {
-    __extends(SceneTerrain, _super);
-    function SceneTerrain(gameCanvas) {
+var TerrainScene = (function (_super) {
+    __extends(TerrainScene, _super);
+    function TerrainScene(gameCanvas) {
         var _this = _super.call(this) || this;
         //地图切块（上下左右各个方向）x方向显示个数
         _this.showCellX = 2;
@@ -28,7 +28,7 @@ var SceneTerrain = (function (_super) {
         _this.cells = new Array();
         return _this;
     }
-    SceneTerrain.prototype.create = function (mapId, mw, mh, gw, gh, cellW, cellH) {
+    TerrainScene.prototype.create = function (mapId, mw, mh, gw, gh, cellW, cellH) {
         this.mapId = mapId;
         this.mw = mw;
         this.mh = mh;
@@ -43,7 +43,7 @@ var SceneTerrain = (function (_super) {
         textLoader.load("resource/assets/outside/map/" + this.mapId + "/Legend.json", this.loadAllMapJsonComplete, this);
     };
     /**地图数据加载完成 */
-    SceneTerrain.prototype.loadAllMapJsonComplete = function (data) {
+    TerrainScene.prototype.loadAllMapJsonComplete = function (data) {
         var _this = this;
         var jsonObj = JSON.parse(data);
         var layers = jsonObj["layers"];
@@ -60,7 +60,7 @@ var SceneTerrain = (function (_super) {
         });
         this.updateTerain();
     };
-    SceneTerrain.prototype.updateTerain = function () {
+    TerrainScene.prototype.updateTerain = function () {
         // var mapSimpleLoader:MapSimpleLoader;
         // var cellXs:number = this.mapLayerData.cellX;
         // var cellYs:number = this.mapLayerData.cellY;
@@ -78,12 +78,12 @@ var SceneTerrain = (function (_super) {
             mapSimpleLoader.load(_this.mapId);
         });
     };
-    SceneTerrain.prototype.onScroll = function (x, y) {
+    TerrainScene.prototype.onScroll = function (x, y) {
     };
     /**
      * 计算格子加载数组，人物脚下先加载，然后由上顺时针加载一圈格子，内圈向外圈加载
      */
-    SceneTerrain.prototype.calShowCell = function (x, y) {
+    TerrainScene.prototype.calShowCell = function (x, y) {
         this.cells.splice(0, this.cells.length);
         var centerCellX = Math.floor(x / this.cellW);
         var centerCellY = Math.floor(y / this.cellH);
@@ -134,7 +134,9 @@ var SceneTerrain = (function (_super) {
             }
         }
     };
-    return SceneTerrain;
-}(egret.Sprite));
-__reflect(SceneTerrain.prototype, "SceneTerrain");
-//# sourceMappingURL=SceneTerrain.js.map
+    TerrainScene.prototype.dispose = function () {
+    };
+    return TerrainScene;
+}(BaseScene));
+__reflect(TerrainScene.prototype, "TerrainScene");
+//# sourceMappingURL=TerrainScene.js.map

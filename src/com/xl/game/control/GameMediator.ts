@@ -1,11 +1,12 @@
 class GameMediator extends BaseMediator{
-	public constructor(resObj?:Object) {
-		super("resource/skins/GameViewSkin.exml",resObj);
+	public constructor(modlueName?:string) {
+		super("resource/skins/GameViewSkin.exml",modlueName);
 	}
 
 	protected initView():void
 	{
 		super.initView();
+		console.log("game.....",RES.getRes("border_png"));
 	}
 
 	protected addEvents():void{

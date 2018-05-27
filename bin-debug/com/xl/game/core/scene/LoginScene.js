@@ -17,8 +17,7 @@ var LoginScene = (function (_super) {
         return _super.call(this) || this;
     }
     LoginScene.prototype.enter = function () {
-        var obj = ConfigManager.ins.getResJsonByName("common");
-        var loginViewMediator = new LoginViewMediator(obj);
+        var loginViewMediator = new LoginViewMediator("common");
         LayerManager.ins.addToLayer(loginViewMediator, LayerManager.UI_LAYER, false, false, false);
     };
     LoginScene.prototype.leave = function () {
