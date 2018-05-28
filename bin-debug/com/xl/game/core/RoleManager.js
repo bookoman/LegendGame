@@ -16,7 +16,14 @@ var RoleManager = (function () {
     });
     RoleManager.prototype.initRole = function (roleID) {
         this.selfRole = new Role(roleID);
-        this.selfRole.playAni("stand");
+        this.selfRole.playAni(RoleAniName.MOVE);
+    };
+    RoleManager.prototype.roleMove = function (x, y) {
+        if (SceneMananger.ins.isOutOfMap(x, y)) {
+            return;
+        }
+        this.selfRole.x = x;
+        this.selfRole.y = y;
     };
     RoleManager._ins = null;
     return RoleManager;

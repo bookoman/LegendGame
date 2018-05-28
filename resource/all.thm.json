@@ -4,6 +4,7 @@
 	"exmls": [
 		"resource/skins/GameViewSkin.exml",
 		"resource/skins/LoginViewSkin.exml",
+		"resource/skins/SignViewSkin.exml",
 		"resource/skins/componet/FloatTipSkin.exml"
 	],
 	"path": "resource/all.thm.json"

@@ -60,10 +60,14 @@ var SceneMananger = (function () {
         GameConfig.MAP_GRID_WIDTH = config.gw;
         GameConfig.MAP_GRID_HEIGHT = config.gh;
         this.sceneTerrain.create(config.mapID, config.mw, config.mh, config.gw, config.gh, config.cellW, config.cellH);
-        RoleManager.ins.initRole("10000");
+        RoleManager.ins.initRole("20000");
     };
     SceneMananger.prototype.timerFunc = function () {
-        console.log("........");
+        // console.log("........")
+    };
+    /**超出地图边界 */
+    SceneMananger.prototype.isOutOfMap = function (tx, ty) {
+        return this.sceneTerrain.isOutOfMap(tx, ty);
     };
     SceneMananger.PRE_LOAD_SCENE = 1;
     SceneMananger.LOGIN_SCENE = 2;

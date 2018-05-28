@@ -14,36 +14,44 @@ var BaseRole = (function (_super) {
         var _this = _super.call(this) || this;
         _this.isLoaded = false;
         _this.roleID = roleID;
-        _this.animation = new dragonBones.Animation();
         return _this;
     }
     BaseRole.prototype.playAni = function (aniName) {
+        this.aniName = aniName;
         if (this.isLoaded) {
+            this.armatureDisplay.animation.play(aniName);
         }
         else {
-            var resObj = ConfigManager.ins.getResJsonByName("animation");
-            RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE, this.loadRESCompleted, this);
-            RES.loadConfig("resource/" + resObj.url, "resource/assets");
-            // RES.getResByUrl("resource/"+resObj.url,this.loadREsCompleted,this,RES.ResourceItem.TYPE_JSON);
+            //添加资源组加载完成事件
+            RES.addEventListener(RES.ResourceEvent.GROUP_COMPLETE, this.onResourceLoadComplete, this);
+            //添加资源组加载进度事件
+            RES.addEventListener(RES.ResourceEvent.GROUP_PROGRESS, this.onResourceProgress, this);
+            //开始加载 preload 资源组
+            RES.loadGroup("role" + this.roleID);
         }
-    };
-    BaseRole.prototype.loadRESCompleted = function (e) {
-        var obj = RES.getRes("animation");
-        RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE, this.loadRESCompleted, this);
-        //添加资源组加载完成事件
-        RES.addEventListener(RES.ResourceEvent.GROUP_COMPLETE, this.onResourceLoadComplete, this);
-        //添加资源组加载进度事件
-        RES.addEventListener(RES.ResourceEvent.GROUP_PROGRESS, this.onResourceProgress, this);
-        //开始加载 preload 资源组
-        RES.loadGroup("role" + this.roleID);
     };
     BaseRole.prototype.onResourceLoadComplete = function () {
         //添加资源组加载完成事件
         RES.removeEventListener(RES.ResourceEvent.GROUP_COMPLETE, this.onResourceLoadComplete, this);
         //添加资源组加载进度事件
         RES.removeEventListener(RES.ResourceEvent.GROUP_PROGRESS, this.onResourceProgress, this);
-        var url = "resource/assets/outside/ani/role/role" + this.roleID + "/" + this.roleID + ".png";
-        console.log(".....", url, RES.getRes(url));
+        //资源
+        var dragonbonesData = RES.getRes(this.roleID + "_ske_json");
+        var textureData = RES.getRes(this.roleID + "_tex_json");
+        var texture = RES.getRes(this.roleID + "_tex_png");
+        var egretFactory = dragonBones.EgretFactory.factory;
+        egretFactory.parseDragonBonesData(dragonbonesData);
+        egretFactory.parseTextureAtlasData(textureData, texture);
+        this.armatureDisplay = egretFactory.buildArmatureDisplay("armatureName");
+        this.armatureDisplay.x = 200;
+        this.armatureDisplay.y = 300;
+        this.armatureDisplay.scaleX = -0.5;
+        this.armatureDisplay.scaleY = 0.5;
+        this.addChild(this.armatureDisplay);
+        LayerManager.ins.addToLayer(this, LayerManager.ROLE_LAYER, false, true, false);
+        //回调播放动画
+        this.isLoaded = true;
+        this.playAni(this.aniName);
     };
     BaseRole.prototype.onResourceProgress = function () {
     };

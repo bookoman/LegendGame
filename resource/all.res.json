@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "game,common,animation",
+			"keys": "game,common,sign,animation",
 			"name": "module"
 		}
 	],
@@ -15,6 +15,11 @@
 			"url": "assets/game.res.json",
 			"type": "json",
 			"name": "game"
+		},
+		{
+			"url": "assets/sign.res.json",
+			"type": "json",
+			"name": "sign"
 		},
 		{
 			"url": "assets/animation.res.json",

@@ -8,10 +8,10 @@ class BaseMediator extends eui.Component{
 		if(moduleName)
 		{
 			this.moduleName = moduleName;
-			var obj = ConfigManager.ins.getResJsonByName(moduleName);
 			this.loadingView = new LoadingUI();
-			LayerManager.ins.addToLayer(this.loadingView,LayerManager.TIP_LAYER,true,false,true);
-			RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE,this.loadREsCompleted,this);
+			LayerManager.ins.addToLayer(this.loadingView,LayerManager.TIP_LAYER,false,false,true);
+			var obj = ConfigManager.ins.getResJsonByName(moduleName);
+			RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE,this.loadRESCompleted,this);
 			RES.loadConfig("resource/"+obj.url, "resource/");
 		}
 		else
@@ -19,9 +19,9 @@ class BaseMediator extends eui.Component{
 			this.initSkin();
 		}
 	}
-	private loadREsCompleted()
+	private loadRESCompleted()
 	{
-		RES.removeEventListener(RES.ResourceEvent.CONFIG_COMPLETE,this.loadREsCompleted,this);
+		RES.removeEventListener(RES.ResourceEvent.CONFIG_COMPLETE,this.loadRESCompleted,this);
         //添加资源组加载完成事件
         RES.addEventListener(RES.ResourceEvent.GROUP_COMPLETE, this.onResourceLoadComplete, this);
         //添加资源组加载进度事件
@@ -37,7 +37,7 @@ class BaseMediator extends eui.Component{
         RES.removeEventListener(RES.ResourceEvent.GROUP_COMPLETE, this.onResourceLoadComplete, this);
         //添加资源组加载进度事件
         RES.removeEventListener(RES.ResourceEvent.GROUP_PROGRESS, this.onResourceProgress, this);	
-		LayerManager.ins.removeToLyaer(this.loadingView,LayerManager.TIP_LAYER,true,false);
+		LayerManager.ins.removeToLayer(this.loadingView,LayerManager.UI_LAYER,true,false);
 		this.initSkin();
 	}
 	private onResourceProgress():void

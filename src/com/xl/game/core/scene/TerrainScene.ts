@@ -158,7 +158,7 @@ class TerrainScene extends BaseScene{
 					continue;
 				}
 				//超出地图边界判断
-				if(cellX < 0 || cellY < 0 || cellX * this.cellW > this.mw || cellY * this.cellH > this.mh)
+				if(this.isOutOfMap(cellX * this.cellW,cellY * this.cellH))
 				{
 					continue;
 				}
@@ -169,6 +169,11 @@ class TerrainScene extends BaseScene{
 			}
 		}
 
+	}
+	/**超出地图边界 */
+	public isOutOfMap(tx:number,ty:number):boolean
+	{
+		return tx < 0 || ty < 0 || tx > this.mw || ty > this.mh;
 	}
 
 

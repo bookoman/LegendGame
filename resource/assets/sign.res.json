@@ -1,0 +1,25 @@
+{
+	"groups": [
+		{
+			"keys": "10000_ske_json,10000_tex_json,10000_tex_png",
+			"name": "sign"
+		}
+	],
+	"resources": [
+		{
+			"url": "assets/outside/ani/role/role10000/10000_ske.json",
+			"type": "json",
+			"name": "10000_ske_json"
+		},
+		{
+			"url": "assets/outside/ani/role/role10000/10000_tex.json",
+			"type": "json",
+			"name": "10000_tex_json"
+		},
+		{
+			"url": "assets/outside/ani/role/role10000/10000_tex.png",
+			"type": "image",
+			"name": "10000_tex_png"
+		}
+	]
+}

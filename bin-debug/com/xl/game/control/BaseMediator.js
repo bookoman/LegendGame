@@ -15,10 +15,10 @@ var BaseMediator = (function (_super) {
         _this.skinClass = skinClass;
         if (moduleName) {
             _this.moduleName = moduleName;
-            var obj = ConfigManager.ins.getResJsonByName(moduleName);
             _this.loadingView = new LoadingUI();
-            LayerManager.ins.addToLayer(_this.loadingView, LayerManager.TIP_LAYER, true, false, true);
-            RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE, _this.loadREsCompleted, _this);
+            LayerManager.ins.addToLayer(_this.loadingView, LayerManager.TIP_LAYER, false, false, true);
+            var obj = ConfigManager.ins.getResJsonByName(moduleName);
+            RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE, _this.loadRESCompleted, _this);
             RES.loadConfig("resource/" + obj.url, "resource/");
         }
         else {
@@ -26,8 +26,8 @@ var BaseMediator = (function (_super) {
         }
         return _this;
     }
-    BaseMediator.prototype.loadREsCompleted = function () {
-        RES.removeEventListener(RES.ResourceEvent.CONFIG_COMPLETE, this.loadREsCompleted, this);
+    BaseMediator.prototype.loadRESCompleted = function () {
+        RES.removeEventListener(RES.ResourceEvent.CONFIG_COMPLETE, this.loadRESCompleted, this);
         //添加资源组加载完成事件
         RES.addEventListener(RES.ResourceEvent.GROUP_COMPLETE, this.onResourceLoadComplete, this);
         //添加资源组加载进度事件
@@ -40,7 +40,7 @@ var BaseMediator = (function (_super) {
         RES.removeEventListener(RES.ResourceEvent.GROUP_COMPLETE, this.onResourceLoadComplete, this);
         //添加资源组加载进度事件
         RES.removeEventListener(RES.ResourceEvent.GROUP_PROGRESS, this.onResourceProgress, this);
-        LayerManager.ins.removeToLyaer(this.loadingView, LayerManager.TIP_LAYER, true, false);
+        LayerManager.ins.removeToLayer(this.loadingView, LayerManager.UI_LAYER, true, false);
         this.initSkin();
     };
     BaseMediator.prototype.onResourceProgress = function () {

@@ -11,8 +11,13 @@ class GameConfig{
 }
 
 /**角色动画枚举 */
-enum RoleAniIndex
+class RoleAniName
 {
-    STAND = 0,INJURED,DEATH,ATTACK,MOVE,SKILL1,SKILL2,SKILL3,SKILL4
+    public static STAND:string = "stand";
+    public static INJURED:string = "injured";
+    public static DEATH:string = "death";
+    public static ATTACK:string = "attack";
+    public static MOVE:string = "move";
+
 }
 

@@ -125,7 +125,7 @@ var TerrainScene = (function (_super) {
                     continue;
                 }
                 //超出地图边界判断
-                if (cellX < 0 || cellY < 0 || cellX * this.cellW > this.mw || cellY * this.cellH > this.mh) {
+                if (this.isOutOfMap(cellX * this.cellW, cellY * this.cellH)) {
                     continue;
                 }
                 mapSimpleLoader = new MapSimpleLoader(this, cellX, cellY, cellXs, cellYs, this.cellW, this.cellH);
@@ -133,6 +133,10 @@ var TerrainScene = (function (_super) {
                 // console.log(cellX,cellY);
             }
         }
+    };
+    /**超出地图边界 */
+    TerrainScene.prototype.isOutOfMap = function (tx, ty) {
+        return tx < 0 || ty < 0 || tx > this.mw || ty > this.mh;
     };
     TerrainScene.prototype.dispose = function () {
     };

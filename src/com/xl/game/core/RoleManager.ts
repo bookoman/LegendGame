@@ -14,6 +14,16 @@ class RoleManager {
 	public initRole(roleID:string):void
 	{
 		this.selfRole = new Role(roleID);
-		this.selfRole.playAni("stand");
+		this.selfRole.playAni(RoleAniName.MOVE);
+	}
+
+	public roleMove(x:number,y:number):void
+	{
+		if(SceneMananger.ins.isOutOfMap(x,y))
+		{
+			return;
+		}
+		this.selfRole.x = x;
+		this.selfRole.y = y
 	}
 }

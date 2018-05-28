@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "bg_jpg,button_down_png,button_up_png",
+			"keys": "bg_jpg,button_down_png,button_up_png,bar_png,bg_png",
 			"name": "common"
 		}
 	],
@@ -20,6 +20,16 @@
 			"url": "assets/common/button_up.png",
 			"type": "image",
 			"name": "button_up_png"
+		},
+		{
+			"url": "assets/common/bar.png",
+			"type": "image",
+			"name": "bar_png"
+		},
+		{
+			"url": "assets/common/bg.png",
+			"type": "image",
+			"name": "bg_png"
 		}
 	]
 }
