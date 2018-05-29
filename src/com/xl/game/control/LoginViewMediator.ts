@@ -9,7 +9,7 @@ class LoginViewMediator extends BaseMediator {
 	{
 		super.initView();
 		console.log("login.....",RES.getRes("bg_jpg"));
-	}
+ 	}
 	protected addEvents():void{
 		this.btnLogin.addEventListener(egret.TouchEvent.TOUCH_TAP,this.onBtnLoginClick,this);
 	}

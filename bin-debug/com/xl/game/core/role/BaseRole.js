@@ -23,12 +23,11 @@ var BaseRole = (function (_super) {
         else {
             var resObj = ConfigManager.ins.getResJsonByName("animation");
             RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE, this.loadRESCompleted, this);
-            RES.loadConfig("resource/" + resObj.url, "resource/assets");
+            RES.loadConfig("resource/" + resObj.url, "resource/");
             // RES.getResByUrl("resource/"+resObj.url,this.loadREsCompleted,this,RES.ResourceItem.TYPE_JSON);
         }
     };
     BaseRole.prototype.loadRESCompleted = function (e) {
-        var obj = RES.getRes("animation");
         RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE, this.loadRESCompleted, this);
         //添加资源组加载完成事件
         RES.addEventListener(RES.ResourceEvent.GROUP_COMPLETE, this.onResourceLoadComplete, this);
