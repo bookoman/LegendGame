@@ -8,8 +8,8 @@ var GameConfig = (function () {
     function GameConfig() {
     }
     /**舞台大小 */
-    GameConfig.STAGE_WIDTH = 750;
-    GameConfig.STAGE_HEIGHT = 1334;
+    GameConfig.STAGE_WIDTH = 1136;
+    GameConfig.STAGE_HEIGHT = 640;
     GameConfig.MAP_GRID_WIDTH = 60;
     GameConfig.MAP_GRID_HEIGHT = 80;
     return GameConfig;

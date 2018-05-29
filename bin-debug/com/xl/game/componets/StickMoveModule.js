@@ -8,43 +8,56 @@ var __extends = this && this.__extends || function __extends(t, e) {
 for (var i in e) e.hasOwnProperty(i) && (t[i] = e[i]);
 r.prototype = e.prototype, t.prototype = new r();
 };
+/**
+ * 左下角虚拟手柄
+ */
 var StickMoveModule = (function (_super) {
     __extends(StickMoveModule, _super);
     function StickMoveModule(parent) {
         var _this = _super.call(this) || this;
+        /**方向X */
+        _this.directionX = 0;
+        /**方向Y */
+        _this.directionY = 0;
+        /**速度倍率 > 0.8 ? 2 : 1  */
+        _this.moveSpeedTimes = 0;
         _this.componentW = 400;
         _this.componentH = 400;
         _this.contain = new egret.Sprite();
+        _this.contain.x = 0;
+        _this.contain.y = GameConfig.STAGE_HEIGHT - _this.componentH;
         parent.addChild(_this.contain);
         var texture = RES.getRes("bg_png");
-        _this._button = new eui.Image(texture);
-        _this._button.x = _this.componentW - texture.textureWidth >> 1;
-        _this._button.y = _this.componentW - texture.textureHeight >> 1;
-        _this.contain.addChild(_this._button);
+        _this.centerBg = new eui.Image(texture);
+        _this.centerBg.width = texture.textureWidth;
+        _this.centerBg.height = texture.textureHeight;
+        _this.centerBg.anchorOffsetX = _this.centerBg.width / 2;
+        _this.centerBg.anchorOffsetY = _this.centerBg.height / 2;
+        _this.centerBg.x = _this.componentW / 2;
+        _this.centerBg.y = _this.componentH / 2;
         texture = RES.getRes("bar_png");
-        _this._thumb = new eui.Image(texture);
-        _this._thumb.x = _this.componentW - texture.textureWidth >> 1;
-        _this._thumb.y = _this.componentH - texture.textureHeight >> 1;
-        _this.contain.addChild(_this._thumb);
-        _this._touchArea = new eui.Rect(_this.componentW, _this.componentH, 0xd5d5d5);
-        _this._touchArea.alpha = 0;
-        _this.contain.addChild(_this._touchArea);
-        _this._center = new eui.Rect(texture.textureWidth, texture.textureHeight);
-        _this._center.x = _this._button.x;
-        _this._center.y = _this._button.y;
-        _this._InitX = _this._center.x + _this._center.width / 2;
-        _this._InitY = _this._center.y + _this._center.height / 2;
+        _this.thumb = new eui.Image(texture);
+        _this.thumb.width = texture.textureWidth;
+        _this.thumb.height = texture.textureHeight;
+        _this.thumb.anchorOffsetX = _this.thumb.width / 2;
+        _this.thumb.anchorOffsetY = _this.thumb.height / 2;
+        _this.thumb.x = _this.componentW / 2;
+        _this.thumb.y = _this.componentW / 2;
+        _this.thumb.visible = false;
+        _this.contain.addChild(_this.thumb);
+        _this.contain.addChild(_this.centerBg);
+        _this.touchArea = new eui.Rect(_this.componentW, _this.componentH, 0xd5d5d5);
+        _this.touchArea.name = "stickTouch";
+        _this.touchArea.alpha = 0;
+        _this.contain.addChild(_this.touchArea);
+        _this.initX = _this.centerBg.x;
+        _this.initY = _this.centerBg.y;
         _this.touchId = -1;
         _this.radius = 150;
-        _this._curPos = new egret.Point();
-        _this._button.addEventListener(egret.TouchEvent.TOUCH_TAP, _this.onTouch, _this);
-        _this._touchArea.addEventListener(egret.TouchEvent.TOUCH_MOVE, _this.onTouchDown, _this);
+        _this.curPos = new egret.Point(_this.initX, _this.initY);
+        _this.touchArea.addEventListener(egret.TouchEvent.TOUCH_BEGIN, _this.onTouchDown, _this);
         return _this;
     }
-    ///处理按钮的触摸事件回调
-    StickMoveModule.prototype.onTouch = function (evt) {
-        console.log("///////////////////////////");
-    };
     StickMoveModule.prototype.Trigger = function (evt) {
         this.onTouchDown(evt);
     };
@@ -52,111 +65,119 @@ var StickMoveModule = (function (_super) {
         console.log("mouse down");
         if (this.touchId == -1) {
             this.touchId = evt.touchId;
-            if (this._tweener != null) {
-                // this._tweener.clear();
-                this._tweener = null;
+            if (this.tweener != null) {
+                // this.tweener.clear();
+                this.tweener = null;
             }
-            // fairygui.GRoot.inst.globalToLocal(Laya.stage.mouseX, Laya.stage.mouseY, this._curPos);
-            var bx = this._curPos.x;
-            var by = this._curPos.y;
-            // this._button.selected = true;
+            var bx = evt.stageX - this.contain.x;
+            var by = evt.stageY - this.contain.y;
             if (bx < 0)
                 bx = 0;
-            else if (bx > this._touchArea.width)
-                bx = this._touchArea.width;
-            // if (by > fairygui.GRoot.inst.height)
-            //     by = fairygui.GRoot.inst.height;
-            if (by > this.componentH)
-                by = this.componentH;
-            else if (by < this._touchArea.y)
-                by = this._touchArea.y;
-            this._lastStageX = bx;
-            this._lastStageY = by;
-            this._startStageX = bx;
-            this._startStageY = by;
-            this._center.visible = true;
-            this._center.x = bx - this._center.width / 2;
-            this._center.y = by - this._center.height / 2;
-            this._button.x = bx - this._button.width / 2;
-            this._button.y = by - this._button.height / 2;
-            var deltaX = bx - this._InitX;
-            var deltaY = by - this._InitY;
+            else if (bx > this.touchArea.width)
+                bx = this.touchArea.width;
+            if (by > this.touchArea.height)
+                by = this.touchArea.height;
+            else if (by < this.touchArea.y)
+                by = this.touchArea.y;
+            this.lastStageX = bx;
+            this.lastStageY = by;
+            this.startStageX = bx;
+            this.startStageY = by;
+            this.centerBg.visible = true;
+            this.thumb.visible = true;
+            this.centerBg.x = this.initX;
+            this.centerBg.y = this.initY;
+            this.thumb.x = bx;
+            this.thumb.y = by;
+            var deltaX = bx - this.initX;
+            var deltaY = by - this.initY;
             var degrees = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
-            this._thumb.rotation = degrees + 90;
-            this.contain.stage.addEventListener(egret.TouchEvent.TOUCH_TAP, this.OnTouchMove, this);
-            this.contain.stage.addEventListener(egret.TouchEvent.TOUCH_CANCEL, this.OnTouchUp, this);
+            this.thumb.rotation = degrees + 90;
+            this.contain.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.OnTouchMove, this);
+            this.contain.stage.addEventListener(egret.TouchEvent.TOUCH_END, this.OnTouchUp, this);
         }
     };
     StickMoveModule.prototype.OnTouchUp = function (evt) {
-        if (this.touchId == -1) {
-            this.touchId = evt.touchId;
-            if (this._tweener != null) {
-                // this._tweener.clear();
-                this._tweener = null;
-            }
-            // fairygui.GRoot.inst.globalToLocal(Laya.stage.mouseX, Laya.stage.mouseY, this._curPos);
-            var bx = this._curPos.x;
-            var by = this._curPos.y;
-            // this._button.selected = true;
-            if (bx < 0)
-                bx = 0;
-            else if (bx > this._touchArea.width)
-                bx = this._touchArea.width;
-            // if (by > fairygui.GRoot.inst.height)
-            //     by = fairygui.GRoot.inst.height;
-            if (by > this.componentH)
-                by = this.componentH;
-            else if (by < this._touchArea.y)
-                by = this._touchArea.y;
-            this._lastStageX = bx;
-            this._lastStageY = by;
-            this._startStageX = bx;
-            this._startStageY = by;
-            this._center.visible = true;
-            this._center.x = bx - this._center.width / 2;
-            this._center.y = by - this._center.height / 2;
-            this._button.x = bx - this._button.width / 2;
-            this._button.y = by - this._button.height / 2;
-            var deltaX = bx - this._InitX;
-            var deltaY = by - this._InitY;
-            var degrees = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
-            this._thumb.rotation = degrees + 90;
-            this.contain.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.OnTouchMove, this);
-            this.contain.stage.addEventListener(egret.TouchEvent.TOUCH_CANCEL, this.OnTouchUp, this);
+        console.log("mouse up");
+        if (this.touchId != -1 && evt.touchId == this.touchId) {
+            this.touchId = -1;
+            this.thumb.rotation = this.thumb.rotation + 180;
+            this.centerBg.visible = false;
+            this.tweener = egret.Tween.get(this.thumb, {
+                loop: false,
+                onChange: null,
+                onChangeObj: this,
+            });
+            this.tweener.to({ x: this.initX, y: this.initY }, 300)
+                .call(this.onTweenComplete, this, ["param1", { key: "key", value: 3 }]);
+            this.contain.stage.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.OnTouchMove, this);
+            this.contain.stage.removeEventListener(egret.TouchEvent.TOUCH_END, this.OnTouchUp, this);
+            // this.dispatchEvent(JoystickModule.JoystickUp);
         }
     };
+    StickMoveModule.prototype.onTweenComplete = function () {
+        this.tweener = null;
+        // this.thumb.selected = false;
+        this.thumb.rotation = 0;
+        this.thumb.visible = false;
+        this.centerBg.visible = true;
+        this.centerBg.x = this.initX;
+        this.centerBg.y = this.initY;
+    };
     StickMoveModule.prototype.OnTouchMove = function (evt) {
+        if (evt.target.name != "stickTouch") {
+            // this.OnTouchUp(evt);
+            return;
+        }
         if (this.touchId != -1 && evt.touchId == this.touchId) {
-            var bx = evt.stageX;
-            var by = evt.stageY;
-            console.log(bx, by);
-            var moveX = bx - this._lastStageX;
-            var moveY = by - this._lastStageY;
-            this._lastStageX = bx;
-            this._lastStageY = by;
-            var buttonX = this._button.x + moveX;
-            var buttonY = this._button.y + moveY;
-            var offsetX = buttonX + this._button.width / 2 - this._startStageX;
-            var offsetY = buttonY + this._button.height / 2 - this._startStageY;
+            var bx = evt.stageX - this.contain.x;
+            var by = evt.stageY - this.contain.y;
+            var moveX = bx - this.lastStageX;
+            var moveY = by - this.lastStageY;
+            this.lastStageX = bx;
+            this.lastStageY = by;
+            var buttonX = this.thumb.x + moveX;
+            var buttonY = this.thumb.y + moveY;
+            var offsetX = buttonX - this.startStageX;
+            var offsetY = buttonY - this.startStageY;
             var rad = Math.atan2(offsetY, offsetX);
             var degree = rad * 180 / Math.PI;
-            this._thumb.rotation = degree + 90;
+            this.thumb.rotation = degree + 90;
             var maxX = this.radius * Math.cos(rad);
             var maxY = this.radius * Math.sin(rad);
             if (Math.abs(offsetX) > Math.abs(maxX))
                 offsetX = maxX;
             if (Math.abs(offsetY) > Math.abs(maxY))
                 offsetY = maxY;
-            buttonX = this._startStageX + offsetX;
-            buttonY = this._startStageY + offsetY;
+            buttonX = this.startStageX + offsetX;
+            buttonY = this.startStageY + offsetY;
             if (buttonX < 0)
                 buttonX = 0;
-            // if (buttonY > fairygui.GRoot.inst.height)
-            //     buttonY = fairygui.GRoot.inst.height;
             if (buttonY > this.componentH)
                 buttonY = this.componentH;
-            this._button.x = buttonX - this._button.width / 2;
-            this._button.y = buttonY - this._button.height / 2;
+            this.thumb.x = buttonX;
+            this.thumb.y = buttonY;
+            if (this.thumb.rotation > 0 && this.thumb.rotation <= 90) {
+                this.directionX = 1;
+                this.directionY = -1;
+            }
+            else if (this.thumb.rotation > 90 && this.thumb.rotation <= 180) {
+                this.directionX = 1;
+                this.directionY = 1;
+            }
+            else if (this.thumb.rotation > 180 && this.thumb.rotation < 270) {
+                this.directionX = -1;
+                this.directionY = -1;
+            }
+            else {
+                this.directionX = -1;
+                this.directionY = 1;
+            }
+            var moveDisX = this.thumb.x - this.centerBg.x;
+            var moveDisY = this.thumb.y - this.centerBg.y;
+            var dis = Math.sqrt(moveDisX * moveDisX + moveDisY * moveDisY);
+            this.moveSpeedTimes = Math.abs(dis) / this.radius > 0.8 ? 2 : 1;
+            // console.log(this.moveSpeedTimes);
             //派发拖动值
             // this.event(JoystickModule.JoystickMoving, degree);
         }
