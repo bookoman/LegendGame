@@ -44,12 +44,13 @@ class BaseRole extends egret.Sprite{
 		egretFactory.parseTextureAtlasData(textureData,texture);
 
 		this.armatureDisplay = egretFactory.buildArmatureDisplay("armatureName");
-		this.armatureDisplay.x = 200;
-		this.armatureDisplay.y = 300;
 		this.armatureDisplay.scaleX = -0.5;
 		this.armatureDisplay.scaleY = 0.5;
-		
+		this.armatureDisplay.x = 0;
+		this.armatureDisplay.y = 0;
 		this.addChild(this.armatureDisplay);
+		this.x = 200;
+		this.y = 300;
 		LayerManager.ins.addToLayer(this,LayerManager.ROLE_LAYER,false,true,false);
 		//回调播放动画
 		this.isLoaded = true;

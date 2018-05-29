@@ -16,7 +16,6 @@ var LoginViewMediator = (function (_super) {
     LoginViewMediator.prototype.initView = function () {
         _super.prototype.initView.call(this);
         // var sign:SignMediator = new SignMediator("sign");
-        var stickMove = new StickMoveModule(this);
     };
     LoginViewMediator.prototype.addEvents = function () {
         this.btnLogin.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onBtnLoginClick, this);

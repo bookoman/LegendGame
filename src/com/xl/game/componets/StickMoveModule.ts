@@ -2,9 +2,7 @@
 /**
  * 左下角虚拟手柄
  */
-class StickMoveModule extends egret.EventDispatcher{
-    public static JoystickMoving:string = "JoystickMoving";
-    public static JoystickUp:string = "JoystickUp";
+class StickMoveModule{
     /**方向X */
     public directionX:number = 0;
     /**方向Y */
@@ -27,9 +25,12 @@ class StickMoveModule extends egret.EventDispatcher{
     private lastStageY;
     private startStageX;
     private startStageY;
-	public constructor(parent) {
-        super();
-        
+    private parent:any;
+    private callBack:Function;
+	public constructor(parent,callBack?:Function) {
+        this.parent = parent;
+        this.callBack = callBack;
+
         this.contain = new egret.Sprite();
         this.contain.x = 0;
         this.contain.y = GameConfig.STAGE_HEIGHT - this.componentH;
@@ -129,7 +130,6 @@ class StickMoveModule extends egret.EventDispatcher{
                             .call(this.onTweenComplete, this, ["param1", {key: "key", value: 3}]);
             this.contain.stage.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.OnTouchMove, this);
             this.contain.stage.removeEventListener(egret.TouchEvent.TOUCH_END, this.OnTouchUp, this);
-            // this.dispatchEvent(JoystickModule.JoystickUp);
         }
     }
     private onTweenComplete():void
@@ -141,6 +141,11 @@ class StickMoveModule extends egret.EventDispatcher{
         this.centerBg.visible = true;
         this.centerBg.x = this.initX;
         this.centerBg.y = this.initY;
+
+
+        this.directionX = 0;
+        this.directionY = 0;
+        this.moveSpeedTimes = 0;
     }
 
     private OnTouchMove(evt):void
@@ -190,12 +195,12 @@ class StickMoveModule extends egret.EventDispatcher{
                 this.directionX = 1;
                 this.directionY = 1;
             }
-            else if(this.thumb.rotation > 180 && this.thumb.rotation < 270)
+            else if(this.thumb.rotation > -90 && this.thumb.rotation <= 0)
             {
                 this.directionX = -1;
                 this.directionY = -1;
             }
-            else{
+            else if(this.thumb.rotation > -180 && this.thumb.rotation <= -90){
                 this.directionX = -1;
                 this.directionY = 1;
             }
@@ -204,9 +209,13 @@ class StickMoveModule extends egret.EventDispatcher{
             var moveDisY:number = this.thumb.y - this.centerBg.y;
             var dis:number = Math.sqrt(moveDisX * moveDisX + moveDisY * moveDisY);
             this.moveSpeedTimes = Math.abs(dis) / this.radius > 0.8 ? 2 : 1;
-            // console.log(this.moveSpeedTimes);
-            //派发拖动值
-            // this.event(JoystickModule.JoystickMoving, degree);
+            
+            // console.log(this.thumb.rotation,this.directionX,this.directionY,this.moveSpeedTimes);
+            if(this.parent && this.callBack)
+            {
+                this.callBack.call(this.parent);
+            }
+            
         }
     }
 

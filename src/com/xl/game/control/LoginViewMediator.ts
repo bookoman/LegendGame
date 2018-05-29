@@ -10,8 +10,6 @@ class LoginViewMediator extends BaseMediator {
 		super.initView();
 
 		// var sign:SignMediator = new SignMediator("sign");
-
-		var stickMove:StickMoveModule = new StickMoveModule(this);
 	}
 	protected addEvents():void{
 		this.btnLogin.addEventListener(egret.TouchEvent.TOUCH_TAP,this.onBtnLoginClick,this);

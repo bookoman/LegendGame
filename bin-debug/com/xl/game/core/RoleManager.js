@@ -3,6 +3,7 @@ var __reflect = (this && this.__reflect) || function (p, c, t) {
 };
 var RoleManager = (function () {
     function RoleManager() {
+        this.roleSpeed = 2;
     }
     Object.defineProperty(RoleManager, "ins", {
         get: function () {
@@ -18,12 +19,15 @@ var RoleManager = (function () {
         this.selfRole = new Role(roleID);
         this.selfRole.playAni(RoleAniName.MOVE);
     };
-    RoleManager.prototype.roleMove = function (x, y) {
-        if (SceneMananger.ins.isOutOfMap(x, y)) {
-            return;
-        }
-        this.selfRole.x = x;
-        this.selfRole.y = y;
+    RoleManager.prototype.roleMove = function (dx, dy, speedTimes) {
+        var tx = this.selfRole.x + dx * this.roleSpeed * speedTimes;
+        var ty = this.selfRole.y + dy * this.roleSpeed * speedTimes;
+        // if(SceneMananger.ins.isOutOfMap(tx,ty))
+        // {
+        // 	return;
+        // }
+        this.selfRole.x = tx;
+        this.selfRole.y = ty;
     };
     RoleManager._ins = null;
     return RoleManager;

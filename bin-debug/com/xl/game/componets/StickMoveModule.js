@@ -1,62 +1,54 @@
 var __reflect = (this && this.__reflect) || function (p, c, t) {
     p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
 };
-var __extends = this && this.__extends || function __extends(t, e) { 
- function r() { 
- this.constructor = t;
-}
-for (var i in e) e.hasOwnProperty(i) && (t[i] = e[i]);
-r.prototype = e.prototype, t.prototype = new r();
-};
 /**
  * 左下角虚拟手柄
  */
-var StickMoveModule = (function (_super) {
-    __extends(StickMoveModule, _super);
-    function StickMoveModule(parent) {
-        var _this = _super.call(this) || this;
+var StickMoveModule = (function () {
+    function StickMoveModule(parent, callBack) {
         /**方向X */
-        _this.directionX = 0;
+        this.directionX = 0;
         /**方向Y */
-        _this.directionY = 0;
+        this.directionY = 0;
         /**速度倍率 > 0.8 ? 2 : 1  */
-        _this.moveSpeedTimes = 0;
-        _this.componentW = 400;
-        _this.componentH = 400;
-        _this.contain = new egret.Sprite();
-        _this.contain.x = 0;
-        _this.contain.y = GameConfig.STAGE_HEIGHT - _this.componentH;
-        parent.addChild(_this.contain);
+        this.moveSpeedTimes = 0;
+        this.componentW = 400;
+        this.componentH = 400;
+        this.parent = parent;
+        this.callBack = callBack;
+        this.contain = new egret.Sprite();
+        this.contain.x = 0;
+        this.contain.y = GameConfig.STAGE_HEIGHT - this.componentH;
+        parent.addChild(this.contain);
         var texture = RES.getRes("bg_png");
-        _this.centerBg = new eui.Image(texture);
-        _this.centerBg.width = texture.textureWidth;
-        _this.centerBg.height = texture.textureHeight;
-        _this.centerBg.anchorOffsetX = _this.centerBg.width / 2;
-        _this.centerBg.anchorOffsetY = _this.centerBg.height / 2;
-        _this.centerBg.x = _this.componentW / 2;
-        _this.centerBg.y = _this.componentH / 2;
+        this.centerBg = new eui.Image(texture);
+        this.centerBg.width = texture.textureWidth;
+        this.centerBg.height = texture.textureHeight;
+        this.centerBg.anchorOffsetX = this.centerBg.width / 2;
+        this.centerBg.anchorOffsetY = this.centerBg.height / 2;
+        this.centerBg.x = this.componentW / 2;
+        this.centerBg.y = this.componentH / 2;
         texture = RES.getRes("bar_png");
-        _this.thumb = new eui.Image(texture);
-        _this.thumb.width = texture.textureWidth;
-        _this.thumb.height = texture.textureHeight;
-        _this.thumb.anchorOffsetX = _this.thumb.width / 2;
-        _this.thumb.anchorOffsetY = _this.thumb.height / 2;
-        _this.thumb.x = _this.componentW / 2;
-        _this.thumb.y = _this.componentW / 2;
-        _this.thumb.visible = false;
-        _this.contain.addChild(_this.thumb);
-        _this.contain.addChild(_this.centerBg);
-        _this.touchArea = new eui.Rect(_this.componentW, _this.componentH, 0xd5d5d5);
-        _this.touchArea.name = "stickTouch";
-        _this.touchArea.alpha = 0;
-        _this.contain.addChild(_this.touchArea);
-        _this.initX = _this.centerBg.x;
-        _this.initY = _this.centerBg.y;
-        _this.touchId = -1;
-        _this.radius = 150;
-        _this.curPos = new egret.Point(_this.initX, _this.initY);
-        _this.touchArea.addEventListener(egret.TouchEvent.TOUCH_BEGIN, _this.onTouchDown, _this);
-        return _this;
+        this.thumb = new eui.Image(texture);
+        this.thumb.width = texture.textureWidth;
+        this.thumb.height = texture.textureHeight;
+        this.thumb.anchorOffsetX = this.thumb.width / 2;
+        this.thumb.anchorOffsetY = this.thumb.height / 2;
+        this.thumb.x = this.componentW / 2;
+        this.thumb.y = this.componentW / 2;
+        this.thumb.visible = false;
+        this.contain.addChild(this.thumb);
+        this.contain.addChild(this.centerBg);
+        this.touchArea = new eui.Rect(this.componentW, this.componentH, 0xd5d5d5);
+        this.touchArea.name = "stickTouch";
+        this.touchArea.alpha = 0;
+        this.contain.addChild(this.touchArea);
+        this.initX = this.centerBg.x;
+        this.initY = this.centerBg.y;
+        this.touchId = -1;
+        this.radius = 150;
+        this.curPos = new egret.Point(this.initX, this.initY);
+        this.touchArea.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchDown, this);
     }
     StickMoveModule.prototype.Trigger = function (evt) {
         this.onTouchDown(evt);
@@ -112,7 +104,6 @@ var StickMoveModule = (function (_super) {
                 .call(this.onTweenComplete, this, ["param1", { key: "key", value: 3 }]);
             this.contain.stage.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.OnTouchMove, this);
             this.contain.stage.removeEventListener(egret.TouchEvent.TOUCH_END, this.OnTouchUp, this);
-            // this.dispatchEvent(JoystickModule.JoystickUp);
         }
     };
     StickMoveModule.prototype.onTweenComplete = function () {
@@ -123,6 +114,9 @@ var StickMoveModule = (function (_super) {
         this.centerBg.visible = true;
         this.centerBg.x = this.initX;
         this.centerBg.y = this.initY;
+        this.directionX = 0;
+        this.directionY = 0;
+        this.moveSpeedTimes = 0;
     };
     StickMoveModule.prototype.OnTouchMove = function (evt) {
         if (evt.target.name != "stickTouch") {
@@ -165,11 +159,11 @@ var StickMoveModule = (function (_super) {
                 this.directionX = 1;
                 this.directionY = 1;
             }
-            else if (this.thumb.rotation > 180 && this.thumb.rotation < 270) {
+            else if (this.thumb.rotation > -90 && this.thumb.rotation <= 0) {
                 this.directionX = -1;
                 this.directionY = -1;
             }
-            else {
+            else if (this.thumb.rotation > -180 && this.thumb.rotation <= -90) {
                 this.directionX = -1;
                 this.directionY = 1;
             }
@@ -177,14 +171,13 @@ var StickMoveModule = (function (_super) {
             var moveDisY = this.thumb.y - this.centerBg.y;
             var dis = Math.sqrt(moveDisX * moveDisX + moveDisY * moveDisY);
             this.moveSpeedTimes = Math.abs(dis) / this.radius > 0.8 ? 2 : 1;
-            // console.log(this.moveSpeedTimes);
-            //派发拖动值
-            // this.event(JoystickModule.JoystickMoving, degree);
+            console.log(this.thumb.rotation, this.directionX, this.directionY, this.moveSpeedTimes);
+            if (this.parent && this.callBack) {
+                this.callBack.call(this.parent);
+            }
         }
     };
-    StickMoveModule.JoystickMoving = "JoystickMoving";
-    StickMoveModule.JoystickUp = "JoystickUp";
     return StickMoveModule;
-}(egret.EventDispatcher));
+}());
 __reflect(StickMoveModule.prototype, "StickMoveModule");
 //# sourceMappingURL=StickMoveModule.js.map
