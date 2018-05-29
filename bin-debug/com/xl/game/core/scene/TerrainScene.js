@@ -22,9 +22,9 @@ var TerrainScene = (function (_super) {
         /**单个图块 */
         _this.cells = null;
         //this.gameCanvase = new egret.RenderTexture();
-        _this.scaleX = 0.1;
-        _this.scaleY = 0.1;
-        LayerManager.ins.addToLayer(_this, LayerManager.TIP_LAYER, false, false, false);
+        _this.scaleX = 1;
+        _this.scaleY = 1;
+        LayerManager.ins.addToLayer(_this, LayerManager.BG_TERRAIN_LAYER, false, false, false);
         _this.cells = new Array();
         return _this;
     }
@@ -58,9 +58,9 @@ var TerrainScene = (function (_super) {
                 _this.maskLayerData.parse(layer);
             }
         });
-        this.updateTerain();
+        this.updateTerain(RoleManager.ins.selfRole.x, RoleManager.ins.selfRole.y);
     };
-    TerrainScene.prototype.updateTerain = function () {
+    TerrainScene.prototype.updateTerain = function (rx, ry) {
         // var mapSimpleLoader:MapSimpleLoader;
         // var cellXs:number = this.mapLayerData.cellX;
         // var cellYs:number = this.mapLayerData.cellY;
@@ -73,7 +73,7 @@ var TerrainScene = (function (_super) {
         // 	}
         // } 
         var _this = this;
-        this.calShowCell(2200, 2200);
+        this.calShowCell(rx, ry);
         this.cells.forEach(function (mapSimpleLoader) {
             mapSimpleLoader.load(_this.mapId);
         });
@@ -125,7 +125,7 @@ var TerrainScene = (function (_super) {
                     continue;
                 }
                 //超出地图边界判断
-                if (cellX < 0 || cellY < 0 || cellX * this.cellW > this.mw || cellY * this.cellH > this.mh) {
+                if (this.isOutOfMap(cellX * this.cellW, cellY * this.cellH)) {
                     continue;
                 }
                 mapSimpleLoader = new MapSimpleLoader(this, cellX, cellY, cellXs, cellYs, this.cellW, this.cellH);
@@ -133,6 +133,10 @@ var TerrainScene = (function (_super) {
                 // console.log(cellX,cellY);
             }
         }
+    };
+    /**超出地图边界 */
+    TerrainScene.prototype.isOutOfMap = function (tx, ty) {
+        return tx < 0 || ty < 0 || tx > this.mw || ty > this.mh;
     };
     TerrainScene.prototype.dispose = function () {
     };

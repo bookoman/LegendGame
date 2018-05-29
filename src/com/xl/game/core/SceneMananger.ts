@@ -71,15 +71,26 @@ class SceneMananger{
         GameConfig.MAP_GRID_HEIGHT = config.gh;
         this.sceneTerrain.create(config.mapID,config.mw,config.mh,config.gw,config.gh,config.cellW,config.cellH);
 
-        RoleManager.ins.initRole("10000");
+        RoleManager.ins.initRole("20000");
 
+    }
+    /**
+     * 
+     */
+    public updateTerrain(rx:number,ry:number):void
+    {
+        this.sceneTerrain.updateTerain(rx,ry);
     }
 
     private timerFunc():void
     {
-        console.log("........")
+        // console.log("........")
     }
-   
+    /**超出地图边界 */
+	public isOutOfMap(tx:number,ty:number):boolean
+	{
+        return this.sceneTerrain.isOutOfMap(tx,ty);
+	}
 
 
 }

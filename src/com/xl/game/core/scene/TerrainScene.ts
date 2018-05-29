@@ -33,9 +33,9 @@ class TerrainScene extends BaseScene{
 	public constructor(gameCanvas?:egret.Sprite) {
 		super();
 		//this.gameCanvase = new egret.RenderTexture();
-		this.scaleX = 0.1;
-		this.scaleY = 0.1;
-		LayerManager.ins.addToLayer(this,LayerManager.TIP_LAYER,false,false,false);
+		this.scaleX = 1;
+		this.scaleY = 1;
+		LayerManager.ins.addToLayer(this,LayerManager.BG_TERRAIN_LAYER,false,false,false);
 		this.cells = new Array();
 	}
 
@@ -75,10 +75,10 @@ class TerrainScene extends BaseScene{
 			}
 		});
 
-		this.updateTerain();
+		this.updateTerain(RoleManager.ins.selfRole.x,RoleManager.ins.selfRole.y);
     }
 
-	public updateTerain():void
+	public updateTerain(rx:number,ry:number):void
 	{
 		// var mapSimpleLoader:MapSimpleLoader;
 		// var cellXs:number = this.mapLayerData.cellX;
@@ -92,7 +92,7 @@ class TerrainScene extends BaseScene{
 		// 	}
 		// } 
 
-		this.calShowCell(2200,2200);
+		this.calShowCell(rx,ry);
 		this.cells.forEach(mapSimpleLoader => {
 			mapSimpleLoader.load(this.mapId)
 		});
@@ -158,7 +158,7 @@ class TerrainScene extends BaseScene{
 					continue;
 				}
 				//超出地图边界判断
-				if(cellX < 0 || cellY < 0 || cellX * this.cellW > this.mw || cellY * this.cellH > this.mh)
+				if(this.isOutOfMap(cellX * this.cellW,cellY * this.cellH))
 				{
 					continue;
 				}
@@ -169,6 +169,11 @@ class TerrainScene extends BaseScene{
 			}
 		}
 
+	}
+	/**超出地图边界 */
+	public isOutOfMap(tx:number,ty:number):boolean
+	{
+		return tx < 0 || ty < 0 || tx > this.mw || ty > this.mh;
 	}
 
 

@@ -15,7 +15,7 @@ var LoginViewMediator = (function (_super) {
     }
     LoginViewMediator.prototype.initView = function () {
         _super.prototype.initView.call(this);
-        console.log("login.....", RES.getRes("bg_jpg"));
+        // var sign:SignMediator = new SignMediator("sign");
     };
     LoginViewMediator.prototype.addEvents = function () {
         this.btnLogin.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onBtnLoginClick, this);
@@ -25,6 +25,12 @@ var LoginViewMediator = (function (_super) {
     };
     LoginViewMediator.prototype.onBtnLoginClick = function (e) {
         console.log("登录");
+        var obj = ConfigManager.ins.getResJsonByName("animation");
+        RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE, this.loadRESCompleteds, this);
+        RES.loadConfig("resource/" + obj.url, "resource/");
+    };
+    LoginViewMediator.prototype.loadRESCompleteds = function () {
+        RES.removeEventListener(RES.ResourceEvent.CONFIG_COMPLETE, this.loadRESCompleteds, this);
         SceneMananger.ins.enter(SceneMananger.GAME_SCENE);
     };
     return LoginViewMediator;

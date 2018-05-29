@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "bg_jpg,button_down_png,button_up_png",
+			"keys": "bg_jpg,button_down_png,button_up_png,bar_png,bg_png",
 			"name": "common"
 		},
 		{
@@ -26,19 +26,15 @@
 			"name": "button_up_png"
 		},
 		{
-			"url": "assets/outside/ani/role/role10000/10000_ske.json",
-			"type": "json",
-			"name": "10000_ske_json"
-		},
-		{
-			"url": "assets/outside/ani/role/role10000/10000_tex.json",
-			"type": "json",
-			"name": "10000_tex_json"
-		},
-		{
-			"url": "assets/outside/ani/role/role10000/10000_tex.png",
+
+			"url": "assets/common/bar.png",
 			"type": "image",
-			"name": "10000_tex_png"
+			"name": "bar_png"
+		},
+		{
+			"url": "assets/common/bg.png",
+			"type": "image",
+			"name": "bg_png"
 		}
 	]
 }
