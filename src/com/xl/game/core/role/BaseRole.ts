@@ -49,8 +49,6 @@ class BaseRole extends egret.Sprite{
 		this.armatureDisplay.x = 0;
 		this.armatureDisplay.y = 0;
 		this.addChild(this.armatureDisplay);
-		this.x = 200;
-		this.y = 300;
 		LayerManager.ins.addToLayer(this,LayerManager.ROLE_LAYER,false,true,false);
 		//回调播放动画
 		this.isLoaded = true;

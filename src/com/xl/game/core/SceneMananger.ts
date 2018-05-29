@@ -74,6 +74,13 @@ class SceneMananger{
         RoleManager.ins.initRole("20000");
 
     }
+    /**
+     * 
+     */
+    public updateTerrain(rx:number,ry:number):void
+    {
+        this.sceneTerrain.updateTerain(rx,ry);
+    }
 
     private timerFunc():void
     {

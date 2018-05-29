@@ -12,9 +12,9 @@
 	],
 	"game": [
 		"bin-debug/com/xl/game/core/loader/BaseLoader.js",
+		"bin-debug/com/xl/game/control/BaseMediator.js",
 		"bin-debug/com/xl/game/core/role/BaseRole.js",
 		"bin-debug/com/xl/game/core/scene/BaseScene.js",
-		"bin-debug/com/xl/game/control/BaseMediator.js",
 		"bin-debug/ThemeAdapter.js",
 		"bin-debug/com/xl/game/componets/StickMoveModule.js",
 		"bin-debug/com/xl/game/const/GameConfig.js",

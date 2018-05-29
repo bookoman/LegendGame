@@ -62,6 +62,12 @@ var SceneMananger = (function () {
         this.sceneTerrain.create(config.mapID, config.mw, config.mh, config.gw, config.gh, config.cellW, config.cellH);
         RoleManager.ins.initRole("20000");
     };
+    /**
+     *
+     */
+    SceneMananger.prototype.updateTerrain = function (rx, ry) {
+        this.sceneTerrain.updateTerain(rx, ry);
+    };
     SceneMananger.prototype.timerFunc = function () {
         // console.log("........")
     };

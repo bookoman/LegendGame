@@ -21,8 +21,6 @@ class LoginViewMediator extends BaseMediator {
 
 	private onBtnLoginClick(e:egret.TouchEvent):void{
 		console.log("登录");
-		
-
 
 		var obj = ConfigManager.ins.getResJsonByName("animation");
 		RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE,this.loadRESCompleteds,this);

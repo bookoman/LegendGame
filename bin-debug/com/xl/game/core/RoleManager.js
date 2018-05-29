@@ -17,17 +17,19 @@ var RoleManager = (function () {
     });
     RoleManager.prototype.initRole = function (roleID) {
         this.selfRole = new Role(roleID);
+        this.selfRole.x = 200;
+        this.selfRole.y = 300;
         this.selfRole.playAni(RoleAniName.MOVE);
     };
     RoleManager.prototype.roleMove = function (dx, dy, speedTimes) {
         var tx = this.selfRole.x + dx * this.roleSpeed * speedTimes;
         var ty = this.selfRole.y + dy * this.roleSpeed * speedTimes;
-        // if(SceneMananger.ins.isOutOfMap(tx,ty))
-        // {
-        // 	return;
-        // }
+        if (SceneMananger.ins.isOutOfMap(tx, ty)) {
+            return;
+        }
         this.selfRole.x = tx;
         this.selfRole.y = ty;
+        SceneMananger.ins.updateTerrain(tx, ty);
     };
     RoleManager._ins = null;
     return RoleManager;

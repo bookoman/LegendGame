@@ -171,7 +171,7 @@ var StickMoveModule = (function () {
             var moveDisY = this.thumb.y - this.centerBg.y;
             var dis = Math.sqrt(moveDisX * moveDisX + moveDisY * moveDisY);
             this.moveSpeedTimes = Math.abs(dis) / this.radius > 0.8 ? 2 : 1;
-            console.log(this.thumb.rotation, this.directionX, this.directionY, this.moveSpeedTimes);
+            // console.log(this.thumb.rotation,this.directionX,this.directionY,this.moveSpeedTimes);
             if (this.parent && this.callBack) {
                 this.callBack.call(this.parent);
             }

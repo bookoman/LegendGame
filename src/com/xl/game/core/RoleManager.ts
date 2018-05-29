@@ -1,5 +1,5 @@
 class RoleManager {
-	private selfRole:Role;
+	public selfRole:Role;
 	private roleSpeed:number = 2;
 	public constructor() {
 	}
@@ -15,7 +15,10 @@ class RoleManager {
 	public initRole(roleID:string):void
 	{
 		this.selfRole = new Role(roleID);
+		this.selfRole.x = 200;
+		this.selfRole.y = 300;
 		this.selfRole.playAni(RoleAniName.MOVE);
+
 	}
 
 	public roleMove(dx:number,dy:number,speedTimes:number):void
@@ -23,11 +26,14 @@ class RoleManager {
 		var tx:number = this.selfRole.x + dx * this.roleSpeed * speedTimes;
 		var ty:number = this.selfRole.y + dy * this.roleSpeed * speedTimes;
 
-		// if(SceneMananger.ins.isOutOfMap(tx,ty))
-		// {
-		// 	return;
-		// }
+		if(SceneMananger.ins.isOutOfMap(tx,ty))
+		{
+			return;
+		}
 		this.selfRole.x = tx;
 		this.selfRole.y = ty;
+
+		SceneMananger.ins.updateTerrain(tx,ty);
+
 	}
 }
