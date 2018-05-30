@@ -78,6 +78,20 @@ var SceneMananger = (function () {
     SceneMananger.prototype.isOutOfMap = function (tx, ty) {
         return this.sceneTerrain.isOutOfMap(tx, ty);
     };
+    Object.defineProperty(SceneMananger.prototype, "mapW", {
+        get: function () {
+            return this.sceneTerrain ? this.sceneTerrain.mapW : 0;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SceneMananger.prototype, "mapH", {
+        get: function () {
+            return this.sceneTerrain ? this.sceneTerrain.mapH : 0;
+        },
+        enumerable: true,
+        configurable: true
+    });
     SceneMananger.PRE_LOAD_SCENE = 1;
     SceneMananger.LOGIN_SCENE = 2;
     SceneMananger.GAME_SCENE = 3;

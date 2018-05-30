@@ -2,6 +2,7 @@
  * 地图加载item
  */
 class MapSimpleLoader{
+	public key:string;
 	private imgLoader:ImageLoader;
 	private gameCanvas:egret.Sprite;
 	public cx:number
@@ -20,6 +21,7 @@ class MapSimpleLoader{
 		this.cellYs= cellYs;
 		this.cellW = cellW;
 		this.cellH = cellH;
+		this.key = cx + "_"+ cy;
 	}
 	public load(mapId:string):void
 	{
@@ -28,8 +30,8 @@ class MapSimpleLoader{
 		if(this.imgLoader == null)
 		{
 			this.imgLoader = new ImageLoader();
+			this.imgLoader.load("resource/assets/outside/map/"+mapId + "/"+blockId+".jpg",this.loadComplete,this);
 		}
-		this.imgLoader.load("resource/assets/outside/map/"+mapId + "/"+blockId+".jpg",this.loadComplete,this);
 		// console.log("resource/assets/outside/map/"+mapId + "/"+blockId+".jpg");
 	}
 
@@ -45,17 +47,21 @@ class MapSimpleLoader{
 		this.bitmap = TextureUtil.ins.bitmapdataToBitmap(data);
 		this.bitmap.x = tx;
 		this.bitmap.y = ty;
+		this.gameCanvas.contains(this.bitmap);
 		this.gameCanvas.addChild(this.bitmap);
-		// console.log("坐标",tx,ty);
+
+		// console.log("子对象个数",this.gameCanvas.numChildren);
+		
 
 	}
 
 	public dispose():void{
 		if(this.bitmap)
 		{
-			if(this.bitmap.parent)
+			if(this.gameCanvas)
 			{
-				this.bitmap.parent.removeChild(this.bitmap);
+				this.gameCanvas.removeChild(this.bitmap);
+				
 			}
 			this.bitmap = null;
 		}

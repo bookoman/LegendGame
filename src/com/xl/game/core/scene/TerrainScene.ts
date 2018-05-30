@@ -3,9 +3,9 @@
  */
 class TerrainScene extends BaseScene{
 	//地图宽
-	private mapW:number;
+	public mapW:number;
 	//地图高
-	private mapH:number;
+	public mapH:number;
 	//格子宽
 	private gw:number;
 	//格子高
@@ -27,18 +27,22 @@ class TerrainScene extends BaseScene{
 	/**地形 */
 	private gameCanvase:egret.RenderTexture;
 	/**单个图块 */
-	private cells:Array<MapSimpleLoader> = null;
+	private cellsDic:Dictionay = null;
 	/**视框 */
-	private viewPort:egret.Rectangle;
+	private viewPort:egret.Rectangle = null;
+	/**显示图块矩形区域 */
+	private showCellPort:egret.Rectangle = null;
 
 	public mapId:string;
+
+	
 	public constructor(gameCanvas?:egret.Sprite) {
 		super();
 		//this.gameCanvase = new egret.RenderTexture();
 		this.scaleX = 1;
 		this.scaleY = 1;
 		LayerManager.ins.addToLayer(this,LayerManager.BG_TERRAIN_LAYER,false,false,false);
-		this.cells = new Array();
+		this.cellsDic = new Dictionay();
 
 		this.viewPort = new egret.Rectangle(0,0,GameConfig.STAGE_WIDTH,GameConfig.STAGE_HEIGHT);
 	}
@@ -84,9 +88,13 @@ class TerrainScene extends BaseScene{
 	public updateTerain(rx:number,ry:number):void
 	{
 		this.calShowCell(rx,ry);
-		this.cells.forEach(mapSimpleLoader => {
-			mapSimpleLoader.load(this.mapId)
-		});
+		var mapSimpleLoader:MapSimpleLoader;
+		for (var key in this.cellsDic) {
+			if (this.cellsDic.hasOwnProperty(key)) {
+				mapSimpleLoader = this.cellsDic[key];
+				mapSimpleLoader.load(this.mapId);
+			}
+		}
 	}
 	/**地图滚动 */
 	public terainScroll(rx:number,ry:number):void
@@ -101,7 +109,7 @@ class TerrainScene extends BaseScene{
 		}
 		else if(rx + this.viewPort.width / 2 > this.mapW)
 		{
-			mapX = this.mapW - this.viewPort.width;
+			mapX = -(this.mapW - this.viewPort.width);
 		}
 		else
 		{
@@ -114,7 +122,7 @@ class TerrainScene extends BaseScene{
 		}
 		else if(ry + this.viewPort.height / 2 > this.mapH)
 		{
-			mapY = this.mapH - this.viewPort.height;
+			mapY = -(this.mapH - this.viewPort.height);
 		}
 		else
 		{
@@ -125,18 +133,23 @@ class TerrainScene extends BaseScene{
 		this.y = mapY;
 
 		//计算是否更新地图
-		if(this.cells.length > 0)
+		if(this.showCellPort == null)
 		{
-			
-			var leftX:number = rx - this.cellW * this.showCellX - this.cellW / 2 + this.viewPort.width / 2;
-			var rightX:number = rx + this.cellW * this.showCellX + this.cellW / 2 - this.viewPort.width / 2;
-			var upY:number = rx - this.cellH * this.showCellX - this.cellH / 2 + this.viewPort.height / 2;
-			var downY:number = rx + this.cellH * this.showCellX + this.cellH / 2 - this.viewPort.height / 2;
-			if(rx > leftX && rx < rightX && ry > upY && ry < downY)
-			{
-				return;
-			}
+
+			var scx:number = rx - this.cellW * this.showCellX - this.cellW / 2;
+			var scy:number = ry - this.cellH * this.showCellX - this.cellH / 2;
+			this.showCellPort = new egret.Rectangle(scx,scy,this.cellW * (this.showCellX + 1),this.cellH *(this.showCellY + 1));
 		}
+		
+		if(rx > this.showCellPort.x && rx < this.showCellPort.x + this.showCellPort.width && ry > this.showCellPort.y && ry < this.showCellPort.y + this.showCellPort.height)
+		{
+			return;
+		}
+		else
+		{
+			this.showCellPort = null;
+		}
+		
 
 		this.updateTerain(rx,ry);
 	}
@@ -144,14 +157,15 @@ class TerrainScene extends BaseScene{
 	private removeFarCell(centerCellX:number,centerCellY:number):void
 	{
 		var mapSimpleLoader:MapSimpleLoader;
-		for(var i = 0;i < this.cells.length;i++)
-		{
-			mapSimpleLoader = this.cells[i];
-			if(mapSimpleLoader.cx < centerCellX - this.showCellX || mapSimpleLoader.cx > centerCellX + this.showCellX ||
-			mapSimpleLoader.cy < centerCellY - this.showCellY || mapSimpleLoader.cy > centerCellY + this.showCellY)
-			{
-				this.cells.splice(i,1);
-				mapSimpleLoader.dispose();
+		for (var key in this.cellsDic) {
+			if (this.cellsDic.hasOwnProperty(key)) {
+				mapSimpleLoader = this.cellsDic[key];
+				if(mapSimpleLoader.cx < centerCellX - this.showCellX || mapSimpleLoader.cx > centerCellX + this.showCellX ||
+				mapSimpleLoader.cy < centerCellY - this.showCellY || mapSimpleLoader.cy > centerCellY + this.showCellY)
+				{
+					this.cellsDic.deleteValue(mapSimpleLoader.key);
+					mapSimpleLoader.dispose();
+				}
 			}
 		}
 	}
@@ -168,7 +182,8 @@ class TerrainScene extends BaseScene{
 		var cellXs:number = this.mapLayerData.cellX;
 		var cellYs:number = this.mapLayerData.cellY;
 		var mapSimpleLoader:MapSimpleLoader = new MapSimpleLoader(this,centerCellX,centerCellY,cellXs,cellYs,this.cellW,this.cellH);
-		this.cells.push(mapSimpleLoader);
+		// this.cells.push(mapSimpleLoader);
+		this.cellsDic.setValue(mapSimpleLoader.key,mapSimpleLoader);
 		//圈数
 		var circleSum:number = Math.max(this.showCellX,this.showCellY);
 		var cellX:number;
@@ -216,12 +231,15 @@ class TerrainScene extends BaseScene{
 				{
 					continue;
 				}
-
-				mapSimpleLoader = new MapSimpleLoader(this,cellX,cellY,cellXs,cellYs,this.cellW,this.cellH); 
-				this.cells.push(mapSimpleLoader);
-				// console.log(cellX,cellY);
+				var key:string = cellX + "_" + cellY;
+				if(!this.cellsDic.getValue(key))
+				{
+					mapSimpleLoader = new MapSimpleLoader(this,cellX,cellY,cellXs,cellYs,this.cellW,this.cellH); 
+					this.cellsDic.setValue(mapSimpleLoader.key,mapSimpleLoader);
+				}
 			}
 		}
+		// console.log(".............."+this.cellsDic.len);
 
 	}
 	/**超出地图边界 */

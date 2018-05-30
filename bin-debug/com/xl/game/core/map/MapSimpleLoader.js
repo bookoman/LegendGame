@@ -13,13 +13,14 @@ var MapSimpleLoader = (function () {
         this.cellYs = cellYs;
         this.cellW = cellW;
         this.cellH = cellH;
+        this.key = cx + "_" + cy;
     }
     MapSimpleLoader.prototype.load = function (mapId) {
         var blockId = this.cy * this.cellXs + this.cx + 1;
         if (this.imgLoader == null) {
             this.imgLoader = new ImageLoader();
+            this.imgLoader.load("resource/assets/outside/map/" + mapId + "/" + blockId + ".jpg", this.loadComplete, this);
         }
-        this.imgLoader.load("resource/assets/outside/map/" + mapId + "/" + blockId + ".jpg", this.loadComplete, this);
         // console.log("resource/assets/outside/map/"+mapId + "/"+blockId+".jpg");
     };
     MapSimpleLoader.prototype.loadComplete = function (data) {
@@ -32,13 +33,14 @@ var MapSimpleLoader = (function () {
         this.bitmap = TextureUtil.ins.bitmapdataToBitmap(data);
         this.bitmap.x = tx;
         this.bitmap.y = ty;
+        this.gameCanvas.contains(this.bitmap);
         this.gameCanvas.addChild(this.bitmap);
-        // console.log("坐标",tx,ty);
+        // console.log("子对象个数",this.gameCanvas.numChildren);
     };
     MapSimpleLoader.prototype.dispose = function () {
         if (this.bitmap) {
-            if (this.bitmap.parent) {
-                this.bitmap.parent.removeChild(this.bitmap);
+            if (this.gameCanvas) {
+                this.gameCanvas.removeChild(this.bitmap);
             }
             this.bitmap = null;
         }

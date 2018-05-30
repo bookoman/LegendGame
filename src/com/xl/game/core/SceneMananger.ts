@@ -98,5 +98,14 @@ class SceneMananger{
         return this.sceneTerrain.isOutOfMap(tx,ty);
 	}
 
+    public get mapW():number
+    {
+        return this.sceneTerrain ? this.sceneTerrain.mapW : 0;
+    }
+    public get mapH():number
+    {
+        return this.sceneTerrain ? this.sceneTerrain.mapH : 0;
+    }
+
 
 }
