@@ -4,12 +4,13 @@
 class MapSimpleLoader{
 	private imgLoader:ImageLoader;
 	private gameCanvas:egret.Sprite;
-	private cx:number
-	private cy:number
+	public cx:number
+	public cy:number
 	private cellXs:number;
 	private cellYs:number;
 	private cellW:number;
 	private cellH:number;
+	private bitmap:egret.Bitmap;
 	
 	public constructor(canvas:egret.Sprite,cx:number,cy:number,cellXs:number,cellYs:number,cellW:number,cellH:number) {
 		this.gameCanvas = canvas;
@@ -41,16 +42,24 @@ class MapSimpleLoader{
 		var ty:number = this.cy * this.cellH;
 		// console.log(tx,ty);
 
-		var bitmap:egret.Bitmap = TextureUtil.ins.bitmapdataToBitmap(data);
-		bitmap.x = tx;
-		bitmap.y = ty;
-		this.gameCanvas.addChild(bitmap);
+		this.bitmap = TextureUtil.ins.bitmapdataToBitmap(data);
+		this.bitmap.x = tx;
+		this.bitmap.y = ty;
+		this.gameCanvas.addChild(this.bitmap);
 		// console.log("坐标",tx,ty);
 
 	}
 
 	public dispose():void{
-		
+		if(this.bitmap)
+		{
+			if(this.bitmap.parent)
+			{
+				this.bitmap.parent.removeChild(this.bitmap);
+			}
+			this.bitmap = null;
+		}
+		this.imgLoader = null;
 	}
 
 }

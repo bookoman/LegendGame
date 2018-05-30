@@ -10,9 +10,7 @@ class SceneMananger{
     private curScene:BaseScene = null;
     private sceneTerrain:TerrainScene;
     constructor(){
-        var time:egret.Timer = new egret.Timer(1000);
-        time.addEventListener(egret.TimerEvent.TIMER, this.timerFunc, this);
-        time.start();
+        
     }
     private static _ins:SceneMananger = null;
     public static get ins():SceneMananger{
@@ -66,26 +64,34 @@ class SceneMananger{
      */
     public initGameScene(mapID:string):void
     {
+        GameDataManager.ins.initData();
+        
         var config:any = ConfigManager.ins.getMapConfigById(mapID);
         GameConfig.MAP_GRID_WIDTH = config.gw;
         GameConfig.MAP_GRID_HEIGHT = config.gh;
         this.sceneTerrain.create(config.mapID,config.mw,config.mh,config.gw,config.gh,config.cellW,config.cellH);
 
         RoleManager.ins.initRole("20000");
-
+        
+        //
+        var time:egret.Timer = new egret.Timer(30);
+        time.addEventListener(egret.TimerEvent.TIMER, this.frameTimeFunc, this);
+        time.start();
     }
     /**
-     * 
+     * 地形滚动
      */
-    public updateTerrain(rx:number,ry:number):void
+    public terainScroll(rx:number,ry:number):void
     {
-        this.sceneTerrain.updateTerain(rx,ry);
+        this.sceneTerrain.terainScroll(rx,ry);
     }
 
-    private timerFunc():void
+    private frameTimeFunc():void
     {
         // console.log("........")
+        RoleManager.ins.roleMove(GameDataManager.ins.playerData.directionX,GameDataManager.ins.playerData.directionY,GameDataManager.ins.playerData.moveSpeed);
     }
+    
     /**超出地图边界 */
 	public isOutOfMap(tx:number,ty:number):boolean
 	{

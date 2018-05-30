@@ -15,11 +15,7 @@ var GameMediator = (function (_super) {
     }
     GameMediator.prototype.initView = function () {
         _super.prototype.initView.call(this);
-        console.log("game.....", RES.getRes("border_png"));
-        this.stickMove = new StickMoveModule(this, this.updateStickMove);
-    };
-    GameMediator.prototype.updateStickMove = function () {
-        RoleManager.ins.roleMove(this.stickMove.directionX, this.stickMove.directionY, this.stickMove.moveSpeedTimes);
+        this.stickMove = new StickMoveModule(this);
     };
     GameMediator.prototype.addEvents = function () {
     };

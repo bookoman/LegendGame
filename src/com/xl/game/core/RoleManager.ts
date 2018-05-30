@@ -1,6 +1,5 @@
 class RoleManager {
 	public selfRole:Role;
-	private roleSpeed:number = 2;
 	public constructor() {
 	}
 	private static _ins:RoleManager = null;
@@ -17,23 +16,31 @@ class RoleManager {
 		this.selfRole = new Role(roleID);
 		this.selfRole.x = 200;
 		this.selfRole.y = 300;
+		GameDataManager.ins.playerData.mapXYPoint.x = this.selfRole.x;
+		GameDataManager.ins.playerData.mapXYPoint.y = this.selfRole.y;
 		this.selfRole.playAni(RoleAniName.MOVE);
 
 	}
 
-	public roleMove(dx:number,dy:number,speedTimes:number):void
+	public roleMove(dx:number,dy:number,moveSpeed:number):void
 	{
-		var tx:number = this.selfRole.x + dx * this.roleSpeed * speedTimes;
-		var ty:number = this.selfRole.y + dy * this.roleSpeed * speedTimes;
+		var playerData = GameDataManager.ins.playerData;
+
+		var tx:number = playerData.mapXYPoint.x + dx * moveSpeed;
+		var ty:number = playerData.mapXYPoint.y + dy * moveSpeed;
 
 		if(SceneMananger.ins.isOutOfMap(tx,ty))
 		{
 			return;
 		}
-		this.selfRole.x = tx;
-		this.selfRole.y = ty;
+		SceneMananger.ins.terainScroll(tx,ty);
+		
+		playerData.mapXYPoint.x = tx;
+		playerData.mapXYPoint.y = ty;
+		this.selfRole.x = playerData.isCenterX ? GameConfig.STAGE_WIDTH / 2 : tx;
+		this.selfRole.y = playerData.isCenterY ? GameConfig.STAGE_HEIGHT /2 : ty;
+		console.log(tx,ty);
 
-		SceneMananger.ins.updateTerrain(tx,ty);
 
 	}
 }

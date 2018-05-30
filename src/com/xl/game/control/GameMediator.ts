@@ -7,15 +7,9 @@ class GameMediator extends BaseMediator{
 	protected initView():void
 	{
 		super.initView();
-		console.log("game.....",RES.getRes("border_png"));
-		this.stickMove = new StickMoveModule(this,this.updateStickMove);
+		this.stickMove = new StickMoveModule(this);
 		
 
-	}
-
-	public updateStickMove():void
-	{
-		RoleManager.ins.roleMove(this.stickMove.directionX,this.stickMove.directionY,this.stickMove.moveSpeedTimes);
 	}
 	
 

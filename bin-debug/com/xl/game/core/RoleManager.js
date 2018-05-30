@@ -3,7 +3,6 @@ var __reflect = (this && this.__reflect) || function (p, c, t) {
 };
 var RoleManager = (function () {
     function RoleManager() {
-        this.roleSpeed = 2;
     }
     Object.defineProperty(RoleManager, "ins", {
         get: function () {
@@ -19,17 +18,23 @@ var RoleManager = (function () {
         this.selfRole = new Role(roleID);
         this.selfRole.x = 200;
         this.selfRole.y = 300;
+        GameDataManager.ins.playerData.mapXYPoint.x = this.selfRole.x;
+        GameDataManager.ins.playerData.mapXYPoint.y = this.selfRole.y;
         this.selfRole.playAni(RoleAniName.MOVE);
     };
-    RoleManager.prototype.roleMove = function (dx, dy, speedTimes) {
-        var tx = this.selfRole.x + dx * this.roleSpeed * speedTimes;
-        var ty = this.selfRole.y + dy * this.roleSpeed * speedTimes;
+    RoleManager.prototype.roleMove = function (dx, dy, moveSpeed) {
+        var playerData = GameDataManager.ins.playerData;
+        var tx = playerData.mapXYPoint.x + dx * moveSpeed;
+        var ty = playerData.mapXYPoint.y + dy * moveSpeed;
         if (SceneMananger.ins.isOutOfMap(tx, ty)) {
             return;
         }
-        this.selfRole.x = tx;
-        this.selfRole.y = ty;
-        SceneMananger.ins.updateTerrain(tx, ty);
+        SceneMananger.ins.terainScroll(tx, ty);
+        playerData.mapXYPoint.x = tx;
+        playerData.mapXYPoint.y = ty;
+        this.selfRole.x = playerData.isCenterX ? GameConfig.STAGE_WIDTH / 2 : tx;
+        this.selfRole.y = playerData.isCenterY ? GameConfig.STAGE_HEIGHT / 2 : ty;
+        console.log(tx, ty);
     };
     RoleManager._ins = null;
     return RoleManager;

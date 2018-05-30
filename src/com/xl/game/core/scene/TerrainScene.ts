@@ -3,9 +3,9 @@
  */
 class TerrainScene extends BaseScene{
 	//地图宽
-	private mw:number;
+	private mapW:number;
 	//地图高
-	private mh:number;
+	private mapH:number;
 	//格子宽
 	private gw:number;
 	//格子高
@@ -28,6 +28,8 @@ class TerrainScene extends BaseScene{
 	private gameCanvase:egret.RenderTexture;
 	/**单个图块 */
 	private cells:Array<MapSimpleLoader> = null;
+	/**视框 */
+	private viewPort:egret.Rectangle;
 
 	public mapId:string;
 	public constructor(gameCanvas?:egret.Sprite) {
@@ -37,13 +39,15 @@ class TerrainScene extends BaseScene{
 		this.scaleY = 1;
 		LayerManager.ins.addToLayer(this,LayerManager.BG_TERRAIN_LAYER,false,false,false);
 		this.cells = new Array();
+
+		this.viewPort = new egret.Rectangle(0,0,GameConfig.STAGE_WIDTH,GameConfig.STAGE_HEIGHT);
 	}
 
-	public create(mapId:string,mw:number,mh:number,gw:number,gh:number,cellW:number,cellH:number):void
+	public create(mapId:string,mapW:number,mapH:number,gw:number,gh:number,cellW:number,cellH:number):void
 	{
 		this.mapId = mapId;
-		this.mw = mw;
-		this.mh = mh;
+		this.mapW = mapW;
+		this.mapH = mapH;
 		this.gw = gw;
 		this.gh = gh;
 		this.cellW = cellW;
@@ -74,42 +78,92 @@ class TerrainScene extends BaseScene{
 				this.maskLayerData.parse(layer);
 			}
 		});
-
 		this.updateTerain(RoleManager.ins.selfRole.x,RoleManager.ins.selfRole.y);
     }
 
 	public updateTerain(rx:number,ry:number):void
 	{
-		// var mapSimpleLoader:MapSimpleLoader;
-		// var cellXs:number = this.mapLayerData.cellX;
-		// var cellYs:number = this.mapLayerData.cellY;
-		// for(var i = 0;i < cellYs;i++)
-		// {
-		// 	for(var j = 0;j < cellXs;j++)
-		// 	{
-		// 		mapSimpleLoader = new MapSimpleLoader(this,j , i ,cellXs,cellYs,this.cellW,this.cellH);
-		// 		mapSimpleLoader.load(this.mapId);
-		// 	}
-		// } 
-
 		this.calShowCell(rx,ry);
 		this.cells.forEach(mapSimpleLoader => {
 			mapSimpleLoader.load(this.mapId)
 		});
 	}
-
-	public onScroll(x:number,y:number):void
+	/**地图滚动 */
+	public terainScroll(rx:number,ry:number):void
 	{
-		
+		GameDataManager.ins.playerData.isCenterX = false;
+		GameDataManager.ins.playerData.isCenterY = false;
+		var mapX:number;
+		var mapY:number;
+		if(rx - this.viewPort.width / 2 < 0)
+		{
+			mapX = 0;
+		}
+		else if(rx + this.viewPort.width / 2 > this.mapW)
+		{
+			mapX = this.mapW - this.viewPort.width;
+		}
+		else
+		{
+			mapX = -(rx - this.viewPort.width / 2);
+			GameDataManager.ins.playerData.isCenterX = true;
+		}
+		if(ry - this.viewPort.height / 2 < 0)
+		{
+			mapY = 0;
+		}
+		else if(ry + this.viewPort.height / 2 > this.mapH)
+		{
+			mapY = this.mapH - this.viewPort.height;
+		}
+		else
+		{
+			mapY = -(ry - this.viewPort.height / 2);
+			GameDataManager.ins.playerData.isCenterY = true;
+		}
+		this.x = mapX;
+		this.y = mapY;
+
+		//计算是否更新地图
+		if(this.cells.length > 0)
+		{
+			
+			var leftX:number = rx - this.cellW * this.showCellX - this.cellW / 2 + this.viewPort.width / 2;
+			var rightX:number = rx + this.cellW * this.showCellX + this.cellW / 2 - this.viewPort.width / 2;
+			var upY:number = rx - this.cellH * this.showCellX - this.cellH / 2 + this.viewPort.height / 2;
+			var downY:number = rx + this.cellH * this.showCellX + this.cellH / 2 - this.viewPort.height / 2;
+			if(rx > leftX && rx < rightX && ry > upY && ry < downY)
+			{
+				return;
+			}
+		}
+
+		this.updateTerain(rx,ry);
+	}
+	/**移除远离图块 */
+	private removeFarCell(centerCellX:number,centerCellY:number):void
+	{
+		var mapSimpleLoader:MapSimpleLoader;
+		for(var i = 0;i < this.cells.length;i++)
+		{
+			mapSimpleLoader = this.cells[i];
+			if(mapSimpleLoader.cx < centerCellX - this.showCellX || mapSimpleLoader.cx > centerCellX + this.showCellX ||
+			mapSimpleLoader.cy < centerCellY - this.showCellY || mapSimpleLoader.cy > centerCellY + this.showCellY)
+			{
+				this.cells.splice(i,1);
+				mapSimpleLoader.dispose();
+			}
+		}
 	}
 	/**
-	 * 计算格子加载数组，人物脚下先加载，然后由上顺时针加载一圈格子，内圈向外圈加载
+	 * 计算格子加载图块数组，人物脚下先加载，然后由上顺时针加载一圈格子图块，内圈向外圈加载
 	 */
 	private calShowCell(x:number,y:number):void
 	{
-		this.cells.splice(0,this.cells.length);
 		var centerCellX:number = Math.floor(x / this.cellW);
 		var centerCellY:number = Math.floor(y / this.cellH);
+
+		this.removeFarCell(centerCellX,centerCellY);
 		//加载个数
 		var cellXs:number = this.mapLayerData.cellX;
 		var cellYs:number = this.mapLayerData.cellY;
@@ -173,7 +227,7 @@ class TerrainScene extends BaseScene{
 	/**超出地图边界 */
 	public isOutOfMap(tx:number,ty:number):boolean
 	{
-		return tx < 0 || ty < 0 || tx > this.mw || ty > this.mh;
+		return tx < 0 || ty < 0 || tx > this.mapW || ty > this.mapH;
 	}
 
 

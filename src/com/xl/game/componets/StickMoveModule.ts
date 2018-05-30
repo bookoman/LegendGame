@@ -3,12 +3,7 @@
  * 左下角虚拟手柄
  */
 class StickMoveModule{
-    /**方向X */
-    public directionX:number = 0;
-    /**方向Y */
-    public directionY:number = 0;
-    /**速度倍率 > 0.8 ? 2 : 1  */
-    public moveSpeedTimes:number = 0;
+    
     private contain:egret.Sprite;
     private componentW:number = 400;
     private componentH:number = 400;
@@ -25,12 +20,8 @@ class StickMoveModule{
     private lastStageY;
     private startStageX;
     private startStageY;
-    private parent:any;
-    private callBack:Function;
-	public constructor(parent,callBack?:Function) {
-        this.parent = parent;
-        this.callBack = callBack;
-
+    
+	public constructor(parent) {
         this.contain = new egret.Sprite();
         this.contain.x = 0;
         this.contain.y = GameConfig.STAGE_HEIGHT - this.componentH;
@@ -75,7 +66,7 @@ class StickMoveModule{
         this.onTouchDown(evt);
     }
     private onTouchDown(evt) {
-        console.log("mouse down");
+        // console.log("mouse down");
         if (this.touchId == -1) {
             this.touchId = evt.touchId;
             if (this.tweener != null) {
@@ -115,7 +106,7 @@ class StickMoveModule{
     }
     private OnTouchUp(evt)
     {
-        console.log("mouse up");
+        // console.log("mouse up");
         if (this.touchId != -1 && evt.touchId == this.touchId) {
             this.touchId = -1;
             this.thumb.rotation = this.thumb.rotation + 180;
@@ -143,9 +134,8 @@ class StickMoveModule{
         this.centerBg.y = this.initY;
 
 
-        this.directionX = 0;
-        this.directionY = 0;
-        this.moveSpeedTimes = 0;
+        GameDataManager.ins.playerData.directionX = 0;
+        GameDataManager.ins.playerData.directionY = 0;
     }
 
     private OnTouchMove(evt):void
@@ -187,34 +177,31 @@ class StickMoveModule{
             
             if(this.thumb.rotation > 0 && this.thumb.rotation <= 90)
             {
-                this.directionX = 1;
-                this.directionY = -1;
+                GameDataManager.ins.playerData.directionX = 1;
+                GameDataManager.ins.playerData.directionY = -1;
             }
             else if(this.thumb.rotation > 90 && this.thumb.rotation <= 180)
             {
-                this.directionX = 1;
-                this.directionY = 1;
+                GameDataManager.ins.playerData.directionX = 1;
+                GameDataManager.ins.playerData.directionY = 1;
             }
             else if(this.thumb.rotation > -90 && this.thumb.rotation <= 0)
             {
-                this.directionX = -1;
-                this.directionY = -1;
+                GameDataManager.ins.playerData.directionX = -1;
+                GameDataManager.ins.playerData.directionY = -1;
             }
             else if(this.thumb.rotation > -180 && this.thumb.rotation <= -90){
-                this.directionX = -1;
-                this.directionY = 1;
+                GameDataManager.ins.playerData.directionX = -1;
+                GameDataManager.ins.playerData.directionY = 1;
             }
-            
             var moveDisX:number = this.thumb.x - this.centerBg.x;
             var moveDisY:number = this.thumb.y - this.centerBg.y;
             var dis:number = Math.sqrt(moveDisX * moveDisX + moveDisY * moveDisY);
-            this.moveSpeedTimes = Math.abs(dis) / this.radius > 0.8 ? 2 : 1;
-            
+            var moveSpeedTimes:number = Math.abs(dis) / this.radius > 0.8 ? 2 : 1;
+            //速度倍率 > 0.8 ? 2 : 1
+            GameDataManager.ins.playerData.setMoveSpeed(moveSpeedTimes);
             // console.log(this.thumb.rotation,this.directionX,this.directionY,this.moveSpeedTimes);
-            if(this.parent && this.callBack)
-            {
-                this.callBack.call(this.parent);
-            }
+           
             
         }
     }

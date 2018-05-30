@@ -29,13 +29,20 @@ var MapSimpleLoader = (function () {
         var tx = this.cx * this.cellW;
         var ty = this.cy * this.cellH;
         // console.log(tx,ty);
-        var bitmap = TextureUtil.ins.bitmapdataToBitmap(data);
-        bitmap.x = tx;
-        bitmap.y = ty;
-        this.gameCanvas.addChild(bitmap);
+        this.bitmap = TextureUtil.ins.bitmapdataToBitmap(data);
+        this.bitmap.x = tx;
+        this.bitmap.y = ty;
+        this.gameCanvas.addChild(this.bitmap);
         // console.log("坐标",tx,ty);
     };
     MapSimpleLoader.prototype.dispose = function () {
+        if (this.bitmap) {
+            if (this.bitmap.parent) {
+                this.bitmap.parent.removeChild(this.bitmap);
+            }
+            this.bitmap = null;
+        }
+        this.imgLoader = null;
     };
     return MapSimpleLoader;
 }());
