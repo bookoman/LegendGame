@@ -3,6 +3,10 @@
 		{
 			"keys": "bg_jpg,button_down_png,button_up_png,bar_png,bg_png",
 			"name": "common"
+		},
+		{
+			"keys": "10000_ske_json,10000_tex_json,10000_tex_png",
+			"name": "role10000"
 		}
 	],
 	"resources": [
@@ -22,6 +26,7 @@
 			"name": "button_up_png"
 		},
 		{
+
 			"url": "assets/common/bar.png",
 			"type": "image",
 			"name": "bar_png"

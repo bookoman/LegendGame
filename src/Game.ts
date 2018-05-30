@@ -45,6 +45,7 @@ class Game extends eui.UILayer{
             console.log(e);
         })
     }
+
     private async runGame() {
         // this.loadTheme();
         SceneMananger.ins.enter(SceneMananger.LOGIN_SCENE);

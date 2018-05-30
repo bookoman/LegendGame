@@ -25,6 +25,11 @@
 			"url": "assets/animation.res.json",
 			"type": "json",
 			"name": "animation"
+		},
+		{
+			"url": "assets/ani.res.json",
+			"type": "json",
+			"name": "ani"
 		}
 	]
 }
