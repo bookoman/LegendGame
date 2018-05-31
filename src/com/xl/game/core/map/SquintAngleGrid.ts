@@ -68,19 +68,18 @@ class SquintAngleGrid{
      * @param x 舞台坐标x
      * @param y 舞台坐标y
      */
-    private getGx(x:number,y:number):number   
+    public getGx(x:number,y:number):number   
     {  
-         return ( x / GameConfig.MAP_GRID_WIDTH) - ( y & 1 ) * ( GameConfig.MAP_GRID_WIDTH / 2 ); 
+         return Math.ceil( x / GameConfig.MAP_GRID_WIDTH) - ( y & 1 ) * ( GameConfig.MAP_GRID_WIDTH / 2 ); 
     }  
     /**
      * 
      * @param x 舞台坐标x
      * @param y 舞台坐标y
      */
-    private getGy(x:number,y:number)   
+    public getGy(x:number,y:number)   
     {  
-        
-         return  (2 * y) / GameConfig.MAP_GRID_HEIGHT;   
+         return  Math.ceil(2 * y / GameConfig.MAP_GRID_HEIGHT);   
     }
 
     /**

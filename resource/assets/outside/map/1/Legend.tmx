@@ -11,8 +11,8 @@
  </imagelayer>
  <layer name="background" width="109" height="129">
   <properties>
-   <property name="cellX" type="int" value="21"/>
-   <property name="cellY" type="int" value="19"/>
+   <property name="cellX" type="int" value="13"/>
+   <property name="cellY" type="int" value="11"/>
   </properties>
   <data>
    <tile gid="0"/>
@@ -14080,8 +14080,8 @@
  </layer>
  <layer name="builder" width="109" height="129">
   <properties>
-   <property name="cellX" type="int" value="21"/>
-   <property name="cellY" type="int" value="19"/>
+   <property name="cellX" type="int" value="13"/>
+   <property name="cellY" type="int" value="11"/>
   </properties>
   <data>
    <tile gid="0"/>
@@ -28149,8 +28149,8 @@
  </layer>
  <layer name="mask" width="109" height="129">
   <properties>
-   <property name="cellX" type="int" value="21"/>
-   <property name="cellY" type="int" value="19"/>
+   <property name="cellX" type="int" value="13"/>
+   <property name="cellY" type="int" value="11"/>
   </properties>
   <data>
    <tile gid="0"/>

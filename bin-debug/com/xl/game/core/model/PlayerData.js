@@ -15,9 +15,15 @@ var PlayerData = (function () {
         this.isCenterY = false;
         /**地图坐标点 */
         this.mapXYPoint = new egret.Point(0, 0);
+        /**网格X */
+        this.gridX = 0;
+        /**网格Y */
+        this.gridY = 0;
     }
     PlayerData.prototype.setMoveSpeed = function (speedTimes) {
-        this.moveSpeed = speedTimes * 3;
+        this.moveSpeed = speedTimes * 10;
+    };
+    PlayerData.prototype.setMapXYPoint = function (tx, ty) {
     };
     return PlayerData;
 }());

@@ -3,8 +3,8 @@
  */
 class ConfigManager {
 	public mapCofing:Object = {
-        "1":{"mapID":"1","name":"主城","mw":10500,"mh":9440,"gw":60,"gh":80,"cellW":512,"cellH":512},
-        "2":{"mapID":"2","name":"血缘","mw":10500,"mh":9440,"gw":60,"gh":80,"cellW":512,"cellH":512}
+        "1":{"mapID":"1","name":"血缘","mw":6540,"mh":5160,"gw":60,"gh":80,"cellW":512,"cellH":512},
+        "2":{"mapID":"2","name":"主城","mw":10500,"mh":9440,"gw":60,"gh":80,"cellW":512,"cellH":512}
     }
 	public allResJsonDic:Object;
 	public constructor() {

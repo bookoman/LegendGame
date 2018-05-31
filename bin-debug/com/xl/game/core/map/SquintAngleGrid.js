@@ -56,7 +56,7 @@ var SquintAngleGrid = (function () {
      * @param y 舞台坐标y
      */
     SquintAngleGrid.prototype.getGx = function (x, y) {
-        return (x / GameConfig.MAP_GRID_WIDTH) - (y & 1) * (GameConfig.MAP_GRID_WIDTH / 2);
+        return Math.ceil(x / GameConfig.MAP_GRID_WIDTH) - (y & 1) * (GameConfig.MAP_GRID_WIDTH / 2);
     };
     /**
      *
@@ -64,7 +64,7 @@ var SquintAngleGrid = (function () {
      * @param y 舞台坐标y
      */
     SquintAngleGrid.prototype.getGy = function (x, y) {
-        return (2 * y) / GameConfig.MAP_GRID_HEIGHT;
+        return Math.ceil(2 * y / GameConfig.MAP_GRID_HEIGHT);
     };
     /**
      * 根据格子坐标得到舞台坐标（格子中心点）

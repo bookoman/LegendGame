@@ -42,6 +42,8 @@ var TerrainScene = (function (_super) {
         this.gh = gh;
         this.cellW = cellW;
         this.cellH = cellH;
+        this.squintAngleGrid = new SquintAngleGrid(mapW, mapH, gw, gh);
+        this.squintAngleGrid.initGrid();
         this.mapLayerData = new MapLayerVo();
         this.builderLayerData = new MapLayerVo();
         this.maskLayerData = new MapLayerVo();
@@ -76,8 +78,11 @@ var TerrainScene = (function (_super) {
     };
     /**地图滚动 */
     TerrainScene.prototype.terainScroll = function (rx, ry) {
-        GameDataManager.ins.playerData.isCenterX = false;
-        GameDataManager.ins.playerData.isCenterY = false;
+        this.isObstacle(rx, ry);
+        this.isMask(rx, ry);
+        var playerData = GameDataManager.ins.playerData;
+        playerData.isCenterX = false;
+        playerData.isCenterY = false;
         var mapX;
         var mapY;
         if (rx - this.viewPort.width / 2 < 0) {
@@ -88,7 +93,7 @@ var TerrainScene = (function (_super) {
         }
         else {
             mapX = -(rx - this.viewPort.width / 2);
-            GameDataManager.ins.playerData.isCenterX = true;
+            playerData.isCenterX = true;
         }
         if (ry - this.viewPort.height / 2 < 0) {
             mapY = 0;
@@ -98,7 +103,7 @@ var TerrainScene = (function (_super) {
         }
         else {
             mapY = -(ry - this.viewPort.height / 2);
-            GameDataManager.ins.playerData.isCenterY = true;
+            playerData.isCenterY = true;
         }
         this.x = mapX;
         this.y = mapY;
@@ -195,11 +200,32 @@ var TerrainScene = (function (_super) {
                 }
             }
         }
-        // console.log("子对象个数",this.numChildren,this.cellsDic.len);
     };
     /**超出地图边界 */
     TerrainScene.prototype.isOutOfMap = function (tx, ty) {
         return tx < 0 || ty < 0 || tx > this.mapW || ty > this.mapH;
+    };
+    /**是否是障碍物 */
+    TerrainScene.prototype.isObstacle = function (mapX, mapY) {
+        if (this.builderLayerData) {
+            var gridX = this.squintAngleGrid.getGx(mapX, mapY);
+            var gridY = this.squintAngleGrid.getGy(mapX, mapY);
+            var ind = gridY * this.builderLayerData.cellX + gridX;
+            var value = this.builderLayerData.data[ind];
+            console.log(2, value);
+        }
+        return false;
+    };
+    /**是否是遮罩 */
+    TerrainScene.prototype.isMask = function (mapX, mapY) {
+        if (this.maskLayerData) {
+            var gridX = this.squintAngleGrid.getGx(mapX, mapY);
+            var gridY = this.squintAngleGrid.getGy(mapX, mapY);
+            var ind = gridY * this.builderLayerData.cellX + gridX;
+            var value = this.maskLayerData.data[ind];
+            console.log(3, value);
+        }
+        return false;
     };
     /**销毁地图 */
     TerrainScene.prototype.dispose = function () {

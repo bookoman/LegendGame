@@ -35,6 +35,8 @@ class TerrainScene extends BaseScene{
 	/**模糊地图 */
 	public vagueMap:egret.Bitmap = null;
 
+	public squintAngleGrid:SquintAngleGrid;
+
 	public constructor(gameCanvas?:egret.Sprite) {
 		super();
 		this.scaleX = 1;
@@ -54,6 +56,9 @@ class TerrainScene extends BaseScene{
 		this.gh = gh;
 		this.cellW = cellW;
 		this.cellH = cellH;
+
+		this.squintAngleGrid = new SquintAngleGrid(mapW,mapH,gw,gh);
+		this.squintAngleGrid.initGrid();
 
 		this.mapLayerData = new MapLayerVo();
 		this.builderLayerData = new MapLayerVo();
@@ -97,8 +102,12 @@ class TerrainScene extends BaseScene{
 	/**地图滚动 */
 	public terainScroll(rx:number,ry:number):void
 	{
-		GameDataManager.ins.playerData.isCenterX = false;
-		GameDataManager.ins.playerData.isCenterY = false;
+		this.isObstacle(rx,ry);
+		this.isMask(rx,ry);
+
+		var playerData:PlayerData = GameDataManager.ins.playerData;
+		playerData.isCenterX = false;
+		playerData.isCenterY = false;
 		var mapX:number;
 		var mapY:number;
 		if(rx - this.viewPort.width / 2 < 0)
@@ -112,7 +121,7 @@ class TerrainScene extends BaseScene{
 		else
 		{
 			mapX = -(rx - this.viewPort.width / 2);
-			GameDataManager.ins.playerData.isCenterX = true;
+			playerData.isCenterX = true;
 		}
 		if(ry - this.viewPort.height / 2 < 0)
 		{
@@ -125,7 +134,7 @@ class TerrainScene extends BaseScene{
 		else
 		{
 			mapY = -(ry - this.viewPort.height / 2);
-			GameDataManager.ins.playerData.isCenterY = true;
+			playerData.isCenterY = true;
 		}
 		this.x = mapX;
 		this.y = mapY;
@@ -244,12 +253,38 @@ class TerrainScene extends BaseScene{
 				}
 			}
 		}
-		// console.log("子对象个数",this.numChildren,this.cellsDic.len);
+		
 	}
 	/**超出地图边界 */
 	public isOutOfMap(tx:number,ty:number):boolean
 	{
 		return tx < 0 || ty < 0 || tx > this.mapW || ty > this.mapH;
+	}
+	/**是否是障碍物 */
+	public isObstacle(mapX,mapY):boolean
+	{
+		if(this.builderLayerData)
+		{
+			var gridX:number = this.squintAngleGrid.getGx(mapX,mapY);
+			var gridY:number = this.squintAngleGrid.getGy(mapX,mapY);
+			var ind:number = gridY * this.builderLayerData.cellX + gridX;
+			var value = this.builderLayerData.data[ind];
+			console.log(2,value);
+		}
+		return false;
+	}
+	/**是否是遮罩 */
+	public isMask(mapX,mapY):boolean
+	{
+		if(this.maskLayerData)
+		{
+			var gridX:number = this.squintAngleGrid.getGx(mapX,mapY);
+			var gridY:number = this.squintAngleGrid.getGy(mapX,mapY);
+			var ind:number = gridY * this.builderLayerData.cellX + gridX;
+			var value = this.maskLayerData.data[ind];
+			console.log(3,value);
+		}
+		return false;
 	}
 
 	/**销毁地图 */
