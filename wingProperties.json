@@ -14,10 +14,6 @@
                 "relativePath": "resource/"
             },
             {
-                "configPath": "resource/assets/sign.res.json",
-                "relativePath": "resource/"
-            },
-            {
                 "configPath": "resource/assets/animation.res.json",
                 "relativePath": "resource/"
             },
