@@ -28,7 +28,7 @@
 		"bin-debug/com/xl/game/core/RoleManager.js",
 		"bin-debug/com/xl/game/core/SceneMananger.js",
 		"bin-debug/LoadingUI.js",
-		"bin-debug/com/xl/game/core/util/TextureUtil.js",
+		"bin-debug/Game.js",
 		"bin-debug/com/xl/game/core/loader/TextLoader.js",
 		"bin-debug/com/xl/game/core/map/MapGrid.js",
 		"bin-debug/com/xl/game/core/map/MapLayerVo.js",
@@ -44,6 +44,6 @@
 		"bin-debug/com/xl/game/core/scene/TerrainScene.js",
 		"bin-debug/com/xl/game/core/util/CommonUtil.js",
 		"bin-debug/com/xl/game/core/util/Dictionay.js",
-		"bin-debug/Game.js"
+		"bin-debug/com/xl/game/core/util/TextureUtil.js"
 	]
 }

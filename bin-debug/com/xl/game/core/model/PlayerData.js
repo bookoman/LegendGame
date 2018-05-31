@@ -17,7 +17,7 @@ var PlayerData = (function () {
         this.mapXYPoint = new egret.Point(0, 0);
     }
     PlayerData.prototype.setMoveSpeed = function (speedTimes) {
-        this.moveSpeed = speedTimes * 2;
+        this.moveSpeed = speedTimes * 3;
     };
     return PlayerData;
 }());

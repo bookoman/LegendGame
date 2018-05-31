@@ -101,7 +101,7 @@ class StickMoveModule{
             this.contain.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.OnTouchMove, this);
             this.contain.stage.addEventListener(egret.TouchEvent.TOUCH_END, this.OnTouchUp, this);
 
-           
+			RoleManager.ins.selfRole.playAni(RoleAniName.MOVE);
         }
     }
     private OnTouchUp(evt)
@@ -121,6 +121,8 @@ class StickMoveModule{
                             .call(this.onTweenComplete, this, ["param1", {key: "key", value: 3}]);
             this.contain.stage.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.OnTouchMove, this);
             this.contain.stage.removeEventListener(egret.TouchEvent.TOUCH_END, this.OnTouchUp, this);
+
+            RoleManager.ins.selfRole.playAni(RoleAniName.STAND);
         }
     }
     private onTweenComplete():void

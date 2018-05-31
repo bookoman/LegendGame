@@ -13,13 +13,14 @@ var BaseRole = (function (_super) {
     function BaseRole(roleID) {
         var _this = _super.call(this) || this;
         _this.isLoaded = false;
+        _this.aniName = "";
         _this.roleID = roleID;
         return _this;
     }
     BaseRole.prototype.playAni = function (aniName) {
         this.aniName = aniName;
         if (this.isLoaded) {
-            this.armatureDisplay.animation.play(aniName);
+            this.armatureDisplay.animation.play(this.aniName);
         }
         else {
             //添加资源组加载完成事件
@@ -43,8 +44,8 @@ var BaseRole = (function (_super) {
         egretFactory.parseDragonBonesData(dragonbonesData);
         egretFactory.parseTextureAtlasData(textureData, texture);
         this.armatureDisplay = egretFactory.buildArmatureDisplay("armatureName");
-        this.armatureDisplay.scaleX = -0.5;
-        this.armatureDisplay.scaleY = 0.5;
+        this.armatureDisplay.scaleX = -1;
+        this.armatureDisplay.scaleY = 1;
         this.armatureDisplay.x = 0;
         this.armatureDisplay.y = 0;
         this.addChild(this.armatureDisplay);

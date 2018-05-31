@@ -18,39 +18,58 @@ class RoleManager {
 		this.selfRole.y = 300;
 		GameDataManager.ins.playerData.mapXYPoint.x = this.selfRole.x;
 		GameDataManager.ins.playerData.mapXYPoint.y = this.selfRole.y;
-		this.selfRole.playAni(RoleAniName.MOVE);
+		this.selfRole.playAni(RoleAniName.STAND);
 
 	}
 
 	public roleMove(dx:number,dy:number,moveSpeed:number):void
 	{
+		if(dx == 0 && dy == 0)
+		{
+			//不移动不更新
+			return;
+		}
 		var playerData = GameDataManager.ins.playerData;
-		var tx:number = playerData.mapXYPoint.x + dx * moveSpeed;
-		var ty:number = playerData.mapXYPoint.y + dy * moveSpeed;
-
+		//场景
+		var mapX:number = playerData.mapXYPoint.x + dx * moveSpeed;
+		var mapY:number = playerData.mapXYPoint.y + dy * moveSpeed;
 		var sceneMgr:SceneMananger = SceneMananger.ins;
 		var roleWidth = 50;
 		var roleHeight = 100;
-		if(tx < roleWidth)
-			tx = roleWidth;
-		else if(tx > sceneMgr.mapW - roleWidth)
-			tx = sceneMgr.mapW - roleWidth;
-		if(ty < roleHeight)
-			ty = roleHeight;
-		else if(ty > sceneMgr.mapH - roleHeight)
-			ty = sceneMgr.mapH - roleHeight;
+		if(mapX < roleWidth)
+			mapX = roleWidth;
+		else if(mapX > sceneMgr.mapW - roleWidth)
+			mapX = sceneMgr.mapW - roleWidth;
+		if(mapY < roleHeight)
+			mapY = roleHeight;
+		else if(mapY > sceneMgr.mapH - roleHeight)
+			mapY = sceneMgr.mapH - roleHeight;
 		
-		playerData.mapXYPoint.x = tx;
-		playerData.mapXYPoint.y = ty;
+		playerData.mapXYPoint.x = mapX;
+		playerData.mapXYPoint.y = mapY;
 		
-		this.selfRole.x = playerData.isCenterX ? GameConfig.STAGE_WIDTH / 2 : this.selfRole.x + dx * moveSpeed;
-		this.selfRole.y = playerData.isCenterY ? GameConfig.STAGE_HEIGHT / 2 : this.selfRole.y + dy * moveSpeed;
-		//场景
-		if(sceneMgr.isOutOfMap(tx,ty))
+		if(sceneMgr.isOutOfMap(mapX,mapY))
 		{
 			return;
 		}
-		sceneMgr.terainScroll(tx,ty);
+		sceneMgr.terainScroll(mapX,mapY);
+
+		//角色
+		var roleX:number = playerData.isCenterX ? GameConfig.STAGE_WIDTH / 2 : this.selfRole.x + dx * moveSpeed;
+		var roleY:number = playerData.isCenterY ? GameConfig.STAGE_HEIGHT / 2 : this.selfRole.y + dy * moveSpeed;
+		if(roleX < roleWidth)
+			roleX = roleWidth;
+		else if(roleX > GameConfig.STAGE_WIDTH - roleWidth)
+			roleX = GameConfig.STAGE_WIDTH - roleWidth;
+		if(roleY < roleHeight)
+			roleY = roleHeight;
+		else if(roleY > GameConfig.STAGE_HEIGHT)
+			roleY = GameConfig.STAGE_HEIGHT;
+		this.selfRole.x = roleX;
+		this.selfRole.y = roleY;
+		
 
 	}
+
+	
 }
