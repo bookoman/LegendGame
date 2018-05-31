@@ -3,20 +3,25 @@ var __reflect = (this && this.__reflect) || function (p, c, t) {
 };
 var Dictionay = (function () {
     function Dictionay() {
+        this.dic = {};
     }
     Dictionay.prototype.setValue = function (key, value) {
-        this[key] = value;
+        this.dic[key] = value;
     };
     Dictionay.prototype.getValue = function (key) {
-        return this[key];
+        return this.dic[key];
     };
     Dictionay.prototype.deleteValue = function (key) {
-        delete this[key];
+        delete this.dic[key];
+    };
+    /**是否有此属性 */
+    Dictionay.prototype.hasProperty = function (key) {
+        return this.dic.hasOwnProperty(key);
     };
     Object.defineProperty(Dictionay.prototype, "len", {
         get: function () {
             var l = 0;
-            for (var key in this) {
+            for (var key in this.dic) {
                 l++;
             }
             return l;

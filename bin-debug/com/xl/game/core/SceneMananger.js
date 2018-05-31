@@ -58,7 +58,7 @@ var SceneMananger = (function () {
         GameConfig.MAP_GRID_WIDTH = config.gw;
         GameConfig.MAP_GRID_HEIGHT = config.gh;
         this.sceneTerrain.create(config.mapID, config.mw, config.mh, config.gw, config.gh, config.cellW, config.cellH);
-        RoleManager.ins.initRole("20000");
+        RoleManager.ins.initRole("10001");
         //
         var time = new egret.Timer(30);
         time.addEventListener(egret.TimerEvent.TIMER, this.frameTimeFunc, this);

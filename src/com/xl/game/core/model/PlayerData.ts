@@ -16,6 +16,6 @@ class PlayerData {
 
 	public setMoveSpeed(speedTimes:number):void
 	{
-		this.moveSpeed = speedTimes * 2;
+		this.moveSpeed = speedTimes * 3;
 	}
 }

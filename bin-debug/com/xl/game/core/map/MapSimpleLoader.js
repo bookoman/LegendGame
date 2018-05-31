@@ -6,6 +6,7 @@ var __reflect = (this && this.__reflect) || function (p, c, t) {
  */
 var MapSimpleLoader = (function () {
     function MapSimpleLoader(canvas, cx, cy, cellXs, cellYs, cellW, cellH) {
+        this.bitmap = null;
         this.gameCanvas = canvas;
         this.cx = cx;
         this.cy = cy;
@@ -14,37 +15,34 @@ var MapSimpleLoader = (function () {
         this.cellW = cellW;
         this.cellH = cellH;
         this.key = cx + "_" + cy;
+        this.bitmap = new egret.Bitmap();
+        this.texture = new egret.Texture();
     }
     MapSimpleLoader.prototype.load = function (mapId) {
-        var blockId = this.cy * this.cellXs + this.cx + 1;
         if (this.imgLoader == null) {
+            var blockId = this.cy * this.cellXs + this.cx + 1;
             this.imgLoader = new ImageLoader();
             this.imgLoader.load("resource/assets/outside/map/" + mapId + "/" + blockId + ".jpg", this.loadComplete, this);
         }
-        // console.log("resource/assets/outside/map/"+mapId + "/"+blockId+".jpg");
     };
     MapSimpleLoader.prototype.loadComplete = function (data) {
-        //var cx:number = (this.blockId - 1) % this.cellXs;
-        //var cy:number = Math.ceil(this.blockId / this.cellXs);
-        //cy = cy == 0 ? 0 : cy - 1;
         var tx = this.cx * this.cellW;
         var ty = this.cy * this.cellH;
-        // console.log(tx,ty);
-        this.bitmap = TextureUtil.ins.bitmapdataToBitmap(data);
+        this.texture._setBitmapData(data);
+        this.bitmap.$setTexture(this.texture);
         this.bitmap.x = tx;
         this.bitmap.y = ty;
-        this.gameCanvas.contains(this.bitmap);
         this.gameCanvas.addChild(this.bitmap);
-        // console.log("子对象个数",this.gameCanvas.numChildren);
     };
     MapSimpleLoader.prototype.dispose = function () {
         if (this.bitmap) {
-            if (this.gameCanvas) {
-                this.gameCanvas.removeChild(this.bitmap);
+            if (this.bitmap.parent) {
+                this.bitmap.parent.removeChild(this.bitmap);
             }
-            this.bitmap = null;
+            // this.bitmap = null;
         }
-        this.imgLoader = null;
+        // this.texture = null;
+        // this.imgLoader = null;
     };
     return MapSimpleLoader;
 }());

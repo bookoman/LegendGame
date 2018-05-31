@@ -4,6 +4,10 @@ class Game extends eui.UILayer{
 	}
 	protected createChildren(): void {
         super.createChildren();
+        egret.runEgret({renderMode:"webgl"});
+        this.stage.orientation = egret.OrientationMode.LANDSCAPE;
+        this.stage.scaleMode = egret.StageScaleMode.SHOW_ALL;
+
 
         egret.lifecycle.addLifecycleListener((context) => {
             // custom lifecycle plugin

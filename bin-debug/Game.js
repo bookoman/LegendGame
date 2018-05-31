@@ -50,6 +50,9 @@ var Game = (function (_super) {
     }
     Game.prototype.createChildren = function () {
         _super.prototype.createChildren.call(this);
+        egret.runEgret({ renderMode: "webgl" });
+        this.stage.orientation = egret.OrientationMode.LANDSCAPE;
+        this.stage.scaleMode = egret.StageScaleMode.SHOW_ALL;
         egret.lifecycle.addLifecycleListener(function (context) {
             // custom lifecycle plugin
         });

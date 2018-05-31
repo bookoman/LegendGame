@@ -21,11 +21,12 @@ var TerrainScene = (function (_super) {
         _this.showCellY = 2;
         /**单个图块 */
         _this.cellsDic = null;
-        /**视框 */
+        /**视框(舞台大小) */
         _this.viewPort = null;
         /**显示图块矩形区域 */
         _this.showCellPort = null;
-        //this.gameCanvase = new egret.RenderTexture();
+        /**模糊地图 */
+        _this.vagueMap = null;
         _this.scaleX = 1;
         _this.scaleY = 1;
         LayerManager.ins.addToLayer(_this, LayerManager.BG_TERRAIN_LAYER, false, false, false);
@@ -46,6 +47,14 @@ var TerrainScene = (function (_super) {
         this.maskLayerData = new MapLayerVo();
         var textLoader = new TextLoader();
         textLoader.load("resource/assets/outside/map/" + this.mapId + "/Legend.json", this.loadAllMapJsonComplete, this);
+        var imgLoader = new ImageLoader();
+        imgLoader.load("resource/assets/outside/map/" + mapId + "/mini.jpg", this.vagueComplete, this);
+    };
+    TerrainScene.prototype.vagueComplete = function (data) {
+        this.vagueMap = TextureUtil.ins.bitmapdataToBitmap(data);
+        this.vagueMap.width = this.mapW;
+        this.vagueMap.height = this.mapH;
+        this.addChildAt(this.vagueMap, 0);
     };
     /**地图数据加载完成 */
     TerrainScene.prototype.loadAllMapJsonComplete = function (data) {
@@ -63,17 +72,7 @@ var TerrainScene = (function (_super) {
                 _this.maskLayerData.parse(layer);
             }
         });
-        this.updateTerain(RoleManager.ins.selfRole.x, RoleManager.ins.selfRole.y);
-    };
-    TerrainScene.prototype.updateTerain = function (rx, ry) {
-        this.calShowCell(rx, ry);
-        var mapSimpleLoader;
-        for (var key in this.cellsDic) {
-            if (this.cellsDic.hasOwnProperty(key)) {
-                mapSimpleLoader = this.cellsDic[key];
-                mapSimpleLoader.load(this.mapId);
-            }
-        }
+        this.calShowCellLoad(RoleManager.ins.selfRole.x, RoleManager.ins.selfRole.y);
     };
     /**地图滚动 */
     TerrainScene.prototype.terainScroll = function (rx, ry) {
@@ -107,26 +106,30 @@ var TerrainScene = (function (_super) {
         if (this.showCellPort == null) {
             var scx = rx - this.cellW * this.showCellX - this.cellW / 2;
             var scy = ry - this.cellH * this.showCellX - this.cellH / 2;
-            this.showCellPort = new egret.Rectangle(scx, scy, this.cellW * (this.showCellX + 1), this.cellH * (this.showCellY + 1));
+            this.showCellPort = new egret.Rectangle(scx, scy, this.cellW * (this.showCellX * 2 + 1), this.cellH * (this.showCellY * 2 + 1));
         }
-        if (rx > this.showCellPort.x && rx < this.showCellPort.x + this.showCellPort.width && ry > this.showCellPort.y && ry < this.showCellPort.y + this.showCellPort.height) {
+        var leftX = this.showCellPort.x + this.viewPort.width / 2;
+        var rightX = this.showCellPort.x + this.showCellPort.width - this.viewPort.width / 2;
+        var topY = this.showCellPort.y + this.viewPort.height / 2;
+        var bottomY = this.showCellPort.y + this.showCellPort.height - this.viewPort.height / 2;
+        if (rx > leftX && rx < rightX && ry > topY && ry < bottomY) {
             return;
         }
         else {
             this.showCellPort = null;
         }
-        this.updateTerain(rx, ry);
+        this.calShowCellLoad(rx, ry);
     };
     /**移除远离图块 */
     TerrainScene.prototype.removeFarCell = function (centerCellX, centerCellY) {
         var mapSimpleLoader;
-        for (var key in this.cellsDic) {
-            if (this.cellsDic.hasOwnProperty(key)) {
-                mapSimpleLoader = this.cellsDic[key];
+        for (var key in this.cellsDic.dic) {
+            if (this.cellsDic.hasProperty(key)) {
+                mapSimpleLoader = this.cellsDic.getValue(key);
                 if (mapSimpleLoader.cx < centerCellX - this.showCellX || mapSimpleLoader.cx > centerCellX + this.showCellX ||
                     mapSimpleLoader.cy < centerCellY - this.showCellY || mapSimpleLoader.cy > centerCellY + this.showCellY) {
-                    this.cellsDic.deleteValue(mapSimpleLoader.key);
                     mapSimpleLoader.dispose();
+                    this.cellsDic.deleteValue(mapSimpleLoader.key);
                 }
             }
         }
@@ -134,16 +137,20 @@ var TerrainScene = (function (_super) {
     /**
      * 计算格子加载图块数组，人物脚下先加载，然后由上顺时针加载一圈格子图块，内圈向外圈加载
      */
-    TerrainScene.prototype.calShowCell = function (x, y) {
+    TerrainScene.prototype.calShowCellLoad = function (x, y) {
         var centerCellX = Math.floor(x / this.cellW);
         var centerCellY = Math.floor(y / this.cellH);
         this.removeFarCell(centerCellX, centerCellY);
         //加载个数
         var cellXs = this.mapLayerData.cellX;
         var cellYs = this.mapLayerData.cellY;
-        var mapSimpleLoader = new MapSimpleLoader(this, centerCellX, centerCellY, cellXs, cellYs, this.cellW, this.cellH);
-        // this.cells.push(mapSimpleLoader);
-        this.cellsDic.setValue(mapSimpleLoader.key, mapSimpleLoader);
+        var mapSimpleLoader;
+        var key = centerCellX + "_" + centerCellY;
+        if (!this.cellsDic.getValue(key)) {
+            mapSimpleLoader = new MapSimpleLoader(this, centerCellX, centerCellY, cellXs, cellYs, this.cellW, this.cellH);
+            mapSimpleLoader.load(this.mapId);
+            this.cellsDic.setValue(mapSimpleLoader.key, mapSimpleLoader);
+        }
         //圈数
         var circleSum = Math.max(this.showCellX, this.showCellY);
         var cellX;
@@ -180,20 +187,27 @@ var TerrainScene = (function (_super) {
                 if (this.isOutOfMap(cellX * this.cellW, cellY * this.cellH)) {
                     continue;
                 }
-                var key = cellX + "_" + cellY;
+                key = cellX + "_" + cellY;
                 if (!this.cellsDic.getValue(key)) {
                     mapSimpleLoader = new MapSimpleLoader(this, cellX, cellY, cellXs, cellYs, this.cellW, this.cellH);
+                    mapSimpleLoader.load(this.mapId);
                     this.cellsDic.setValue(mapSimpleLoader.key, mapSimpleLoader);
                 }
             }
         }
-        // console.log(".............."+this.cellsDic.len);
+        // console.log("子对象个数",this.numChildren,this.cellsDic.len);
     };
     /**超出地图边界 */
     TerrainScene.prototype.isOutOfMap = function (tx, ty) {
         return tx < 0 || ty < 0 || tx > this.mapW || ty > this.mapH;
     };
+    /**销毁地图 */
     TerrainScene.prototype.dispose = function () {
+        this.removeChildren();
+        if (this.vagueMap) {
+            if (this.vagueMap.parent)
+                this.vagueMap.parent.removeChild(this.vagueMap);
+        }
     };
     return TerrainScene;
 }(BaseScene));

@@ -11,7 +11,8 @@ class MapSimpleLoader{
 	private cellYs:number;
 	private cellW:number;
 	private cellH:number;
-	private bitmap:egret.Bitmap;
+	private bitmap:egret.Bitmap = null;
+	private texture:egret.Texture;
 	
 	public constructor(canvas:egret.Sprite,cx:number,cy:number,cellXs:number,cellYs:number,cellW:number,cellH:number) {
 		this.gameCanvas = canvas;
@@ -22,50 +23,44 @@ class MapSimpleLoader{
 		this.cellW = cellW;
 		this.cellH = cellH;
 		this.key = cx + "_"+ cy;
+
+		this.bitmap = new egret.Bitmap();
+		this.texture = new egret.Texture();
 	}
 	public load(mapId:string):void
 	{
-		var blockId:number = this.cy * this.cellXs +  this.cx + 1;
-		
 		if(this.imgLoader == null)
 		{
+			var blockId:number = this.cy * this.cellXs +  this.cx + 1;
 			this.imgLoader = new ImageLoader();
 			this.imgLoader.load("resource/assets/outside/map/"+mapId + "/"+blockId+".jpg",this.loadComplete,this);
 		}
-		// console.log("resource/assets/outside/map/"+mapId + "/"+blockId+".jpg");
 	}
 
 	private loadComplete(data):void{
-		//var cx:number = (this.blockId - 1) % this.cellXs;
-		//var cy:number = Math.ceil(this.blockId / this.cellXs);
-		//cy = cy == 0 ? 0 : cy - 1;
-
+		
 		var tx:number = this.cx * this.cellW;
 		var ty:number = this.cy * this.cellH;
-		// console.log(tx,ty);
-
-		this.bitmap = TextureUtil.ins.bitmapdataToBitmap(data);
+		
+		this.texture._setBitmapData(data);
+		this.bitmap.$setTexture(this.texture);
 		this.bitmap.x = tx;
 		this.bitmap.y = ty;
-		this.gameCanvas.contains(this.bitmap);
 		this.gameCanvas.addChild(this.bitmap);
-
-		// console.log("子对象个数",this.gameCanvas.numChildren);
 		
-
 	}
 
 	public dispose():void{
 		if(this.bitmap)
 		{
-			if(this.gameCanvas)
+			if(this.bitmap.parent)
 			{
-				this.gameCanvas.removeChild(this.bitmap);
-				
+				this.bitmap.parent.removeChild(this.bitmap);
 			}
-			this.bitmap = null;
+			// this.bitmap = null;
 		}
-		this.imgLoader = null;
+		// this.texture = null;
+		// this.imgLoader = null;
 	}
 
 }
