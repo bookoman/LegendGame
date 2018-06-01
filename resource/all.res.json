@@ -3,6 +3,10 @@
 		{
 			"keys": "game,common,sign,animation",
 			"name": "module"
+		},
+		{
+			"keys": "",
+			"name": "preload"
 		}
 	],
 	"resources": [
